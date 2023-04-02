@@ -14,30 +14,24 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 app.get('/todos', async (req, res) => {
   //error checking (set resolution status early if needed)
   //...
-  //connect to database for operation
-  let success = false;
-  let data = await conn('select * from todolist').then(
+  //connect to database for operation and return result depending on success / failure
+  await conn('select * from todolist').then(
     (resolve) => {
       console.log("Query Resolved!");
-      success = true;
+      res.status(200).json({
+        status: "success",
+        length: resolve?.length,
+        data: resolve
+      });
     }, (reject) => {
       //maybe figure out how to get error code / message
       console.log("Query Rejected!");
+      res.status(500).json({
+        status: "failure",
+        message: "Operation did not succeed"
+      });
     }
   );
-  //Set resolution of API call
-  if (success) {
-    res.status(200).json({
-      status: "success",
-      length: data?.length,
-      data: data
-    });
-  } else {
-    res.status(500).json({
-      status: "failure",
-      message: "Operation did not succeed"
-    });
-  }
 });
 
 app.post('/todos/:id', (req, res) => {

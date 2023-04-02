@@ -1,12 +1,13 @@
 {
-  "name": "nodeapi",
+  "name": "pokemon-stats-page",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint .",
+    "start": "systemctl start mysql.service && node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Trashpanda70",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
