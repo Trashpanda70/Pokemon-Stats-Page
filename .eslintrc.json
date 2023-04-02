@@ -1,0 +1,21 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "no-undefined": "error",
+        "comma-dangle": ["warn", "never"],
+        "comma-spacing": ["error", { "before": false, "after": true }],
+        "indent": ["warn", 2],
+        "max-statements-per-line": ["warn", { "max": 2 }],
+        "semi": ["error", "always"],
+        "space-in-parens": ["warn", "never"],
+        "no-unused-vars": "off"
+    }
+}
