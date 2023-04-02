@@ -3,10 +3,11 @@ const mysql = require('mysql');
 var con = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
-  password: "pass"
+  password: "pass",
+  database: "todos"
 });
 
-async function connectToDB(query) {
+module.exports = async function connectToDB(query) {
   return await new Promise((resolve, reject) => {
     con.connect((err) => {
       if (err) {
@@ -14,7 +15,7 @@ async function connectToDB(query) {
         reject(err);
       } else {
         console.log("CONNECTED!");
-        //ex query: 'select * from todos.todolist'
+        //ex query: 'select * from todolist' or 'select * from todos.todolist' if no database key in connection
         con.query(query, (err, res) => {
           if (err) {
             reject('Query failed');
@@ -25,4 +26,4 @@ async function connectToDB(query) {
       }
     });
   });
-}
+};
