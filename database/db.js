@@ -14,14 +14,15 @@ function connect(path = defaultPath) {
 }
 
 //close database connection
-function close(db) {
-  db.close((err) => {
-    if (err) {
-      console.error(`Error message below:\n${err.message}`);
-      return false;
-    }
-    return true;
-  });
+async function close(db) {
+  await new Promise((resolve, reject) =>
+    db.close((err) => {
+      if (err) {
+        console.error(`Error message below:\n${err.message}`);
+        reject(err);
+      }
+      resolve();
+    }));
 }
 
 /*
@@ -45,13 +46,11 @@ exports.execGetCommand = function execGetCommand(command, args = []) {
         if (!row) {
           throw new ServerError("No data found for given command.", 404);
         }
-        if (!close(db))
-          reject(new ServerError("Could not close database. Please report this."));
+        close(db).catch(err => { throw new ServerError(err); });
         resolve(row);
       });
     } catch (err) {
-      if (!close(db))
-        reject(new ServerError("Could not close database. Please report this."));
+      close(db).catch(err => { throw new ServerError(err); });
       reject(err);
     }
   });
@@ -79,12 +78,10 @@ exports.execEachCommand = function execEachCommand(db, command, args = [], callb
           throw new ServerError("Wrong number of arguments provided for given query. Please report this.", 500);
         //call to actual function
         //...
-        if (!close(db))
-          reject(new ServerError("Could not close database. Please report this."));
+        close(db).catch(err => { throw new ServerError(err); });
         resolve();
       } catch (err) {
-        if (!close(db))
-          reject(new ServerError("Could not close database. Please report this."));
+        close(db).catch(err => { throw new ServerError(err); });
         reject(err);
       }
     });
@@ -114,13 +111,11 @@ exports.execAllCommand = function execAllCommand(command, args = []) {
         if (rows.length == 0) {
           throw new ServerError("No data found for given command.", 404);
         }
-        if (!close(db))
-          reject(new ServerError("Could not close database. Please report this."));
+        close(db).catch(err => { throw new ServerError(err); });
         resolve(rows);
       });
     } catch (err) {
-      if (!close(db))
-        reject(new ServerError("Could not close database. Please report this."));
+      close(db).catch(err => { throw new ServerError(err); });
       reject(err);
     }
   });
@@ -138,12 +133,10 @@ exports.runCommand = function runCommand(command) {
       if (!db)
         reject(new ServerError("Could not connect to database. Please report this."));
       try {
-        if (!close(db))
-          reject(new ServerError("Could not close database. Please report this."));
+        close(db).catch(err => { throw new ServerError(err); });
         db.run(command);
       } catch (err) {
-        if (!close(db))
-          reject(new ServerError("Could not close database. Please report this."));
+        close(db).catch(err => { throw new ServerError(err); });
         reject(err);
       }
     });
