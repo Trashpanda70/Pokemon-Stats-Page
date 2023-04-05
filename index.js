@@ -1,38 +1,25 @@
 const express = require('express');
 const app = express();
-const conn = require('./db');
+const db = require('./database/db');
 const PORT = 8080;
 
 //make express use json so it can parse correctly
 app.use(express.json());
-
+let database = db.connect();
 
 //start app
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
+//req is request (incoming data)
+//res is response (outgoing data)
 //Endpoints
 app.get('/todos', async (req, res) => {
-  //error checking (set resolution status early if needed)
-  //...
-  //connect to database for operation and return result depending on success / failure
-  await conn('select * from todolist').then(
-    (resolve) => {
-      console.log("Query Resolved!");
-      res.status(200).json({
-        status: "success",
-        length: resolve?.length,
-        data: resolve
-      });
-    }, (reject) => {
-      //maybe figure out how to get error code / message
-      console.log("Query Rejected!");
-      res.status(500).json({
-        status: "failure",
-        message: "Operation did not succeed"
-      });
-    }
-  );
+  let cmd = 'select * from todolist';
+  let data = await db.execAllCommand(database, cmd);
+  console.log(data);
+  res.status(200).send({ msg: `data retrieved: ${data}` });
 });
+db.close(database);
 
 app.post('/todos/:id', (req, res) => {
   const { id } = req.params;
