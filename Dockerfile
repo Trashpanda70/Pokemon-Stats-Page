@@ -14,4 +14,3 @@ RUN sqlite3 db-files/todos.db < test-init.sql
 # install dependencies and start program
 RUN npm install
 CMD /bin/bash
-
