@@ -5,21 +5,23 @@ const PORT = 8080;
 
 //make express use json so it can parse correctly
 app.use(express.json());
-let database = db.connect();
-
 //start app
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 //req is request (incoming data)
 //res is response (outgoing data)
-//Endpoints
+/* ------------------ Endpoints ------------------ */
+
+//get all
 app.get('/todos', async (req, res) => {
-  let cmd = 'select * from todolist';
-  let data = await db.execAllCommand(database, cmd);
-  console.log(data);
+  let cmd = 'select * from todolist;';
+  let data = await db.execAllCommand(cmd).catch(err => {
+    res.status(err.status).send({ msg: err.message });
+    return;
+  });
   res.status(200).send({ msg: `data retrieved: ${data}` });
 });
-db.close(database);
+
 
 app.post('/todos/:id', (req, res) => {
   const { id } = req.params;

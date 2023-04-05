@@ -6,10 +6,6 @@ class ServerError extends Error {
     this.name = this.constructor.name;
     this.status = status;
   }
-
-  getStatusCode() {
-    return this.status;
-  }
 }
 
 module.exports = ServerError;
