@@ -15,4 +15,6 @@ INSERT INTO todolist (title) VALUES
 
 -- INSERT INTO table1 (column1,column2 ,..)
 -- VALUES 
---    (value1,value2 ,...)
+--    (value1,value2 ,...),
+--    (value1,value2 ,...),
+--    (value1,value2 ,...);

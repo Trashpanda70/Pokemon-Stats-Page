@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const ServerError = require('../utils/ServerError');
-const ut = require('../utils/UtilityFunctions');
+const util = require('../utils/UtilityFunctions');
 
 let defaultPath = './db-files/todos.db';
 
@@ -202,7 +202,7 @@ exports.insertDataManyRows = (table, columns, values, path = defaultPath) => {
     if (!db)
       reject(new ServerError("Could not connect to database. Please report this."));
     try {
-      if (ut.isJagged(values))
+      if (util.isJagged(values))
         reject(new ServerError("Values array is jagged, not all rows have the same amount of entries", 400));
       if (columns.length != values[0].length)
         reject(new ServerError("Command did not provide same number of columns and values to insert", 400));
@@ -226,3 +226,23 @@ exports.insertDataManyRows = (table, columns, values, path = defaultPath) => {
     }
   });
 };
+
+
+/* ----------------------------- PUT (update) OPERATIONS ----------------------------- */
+exports.updateData = (table, path = defaultPath) => {
+  return new Promise((resolve, reject) => {
+    let db = connect();
+    if (!db)
+      reject(new ServerError("Could not connect to database. Please report this."));
+    try {
+      reject(new ServerError("Update Endpoint not implemented yet", 501));
+      close(db).catch(err => { throw new ServerError(err); });
+      resolve();
+    } catch (err) {
+      close(db).catch(err => { throw new ServerError(err); });
+      reject(err);
+    }
+  });
+};
+
+

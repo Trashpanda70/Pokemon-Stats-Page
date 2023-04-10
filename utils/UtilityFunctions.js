@@ -9,7 +9,7 @@ exports.isJagged = (arr) => {
   if (!Array.isArray(arr[0]))
     one_d = true;
   else {
-    let length = arr[0].length;
+    length = arr[0].length;
   }
   for (const e of arr) {
     if (one_d) {
@@ -21,5 +21,5 @@ exports.isJagged = (arr) => {
       return true;
     }
   }
-  return true;
+  return false;
 };
