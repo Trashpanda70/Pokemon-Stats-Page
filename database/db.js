@@ -245,4 +245,31 @@ exports.updateData = (table, path = defaultPath) => {
   });
 };
 
+/* ----------------------------- DELETE (delete) OPERATIONS ----------------------------- */
+exports.deleteData = (table, all = false, path = defaultPath) => {
+  return new Promise((resolve, reject) => {
+    let db = connect();
+    if (!db)
+      reject(new ServerError("Could not connect to database. Please report this."));
+    try {
+      if (all) {
+        db.run(`DELETE FROM ${table}`).catch((err) => {
+          if (err)
+            reject(err);
+        });
+        db.run(`VACUUM`).catch((err) => {
+          if (err)
+            reject(err);
+        });
+        resolve();
+      }
+      reject(new ServerError("Cannot delete specific rows yet", 501));
+      close(db).catch(err => { throw new ServerError(err); });
+      resolve();
+    } catch (err) {
+      close(db).catch(err => { throw new ServerError(err); });
+      reject(err);
+    }
+  });
+};
 
