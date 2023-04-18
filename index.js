@@ -15,13 +15,13 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 //get all
 app.get('/todos', async (req, res) => {
   let cmd = 'select * from todolist;';
-  let data = await db.execAllCommand(cmd).catch(err => {
+  let data = await db.execAllCommand(cmd).then(data => {
+    console.log(data);
+    res.status(200).send({ data });
+  }).catch(err => {
     res.status(err.status).send({ msg: err.message });
-    return;
   });
-  res.status(200).send({ msg: `data retrieved: ${data}` });
 });
-
 
 app.post('/todos/:id', (req, res) => {
   const { id } = req.params;
@@ -29,7 +29,7 @@ app.post('/todos/:id', (req, res) => {
   if (!data) {
     res.status(400).send({ message: "Did not specify data" });
   }
-  //would save
+
   res.status(200).send({
     data: `your data of ${data} was saved to id ${id}`
   });

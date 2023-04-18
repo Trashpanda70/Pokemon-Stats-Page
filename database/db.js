@@ -17,7 +17,7 @@ function connect(path) {
 
 //close database connection
 async function close(db) {
-  await new Promise((resolve, reject) =>
+  return await new Promise((resolve, reject) =>
     db.close((err) => {
       if (err) {
         console.error(`Error message below:\n${err.message}`);
@@ -115,8 +115,12 @@ exports.execAllCommand = (command, args = [], path = defaultPath) => {
         if (rows.length == 0) {
           throw new ServerError("No data found for given command.", 404);
         }
-        close(db).catch(err => { throw new ServerError(err); });
-        resolve(rows);
+        close(db).then(() => {
+          resolve(rows);
+        }).catch(err => {
+          throw new ServerError(err);
+        });
+        //resolve(rows);
       });
     } catch (err) {
       close(db).catch(err => { throw new ServerError(err); });

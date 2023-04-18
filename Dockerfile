@@ -10,7 +10,7 @@ RUN git clone https://github.com/Trashpanda70/Pokemon-Stats-Page.git app
 WORKDIR /app
 # create sqlite3 (test) database
 RUN mkdir db-files
-RUN sqlite3 db-files/todos.db < test-init.sql
+RUN sqlite3 db-files/todos.db < files/test-init.sql
 # install dependencies and start program
 RUN npm install
 CMD /bin/bash
