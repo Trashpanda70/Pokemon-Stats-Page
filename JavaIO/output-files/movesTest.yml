@@ -1,0 +1,28 @@
+---
+Names:
+  - Megahorn
+  - Attack Order
+  - Bug Buzz
+
+Moves:
+  Megahorn:
+    type: bug
+    category: Physical
+    power: 120
+    accuracy: 85
+    pp: 10
+    description: "Using its tough and impressive horn, the user rams into the target with no letup."
+  Attack Order:
+    type: bug
+    category: Physical
+    power: 90
+    accuracy: 100
+    pp: 15
+    description: "The user calls out its underlings to pummel the target. Critical hits land more easily."
+  Bug Buzz:
+    type: bug
+    category: Special
+    power: 90
+    accuracy: 100
+    pp: 10
+    description: "The user vibrates its wings to generate a damaging sound wave. It may also lower the target's Sp. Def stat."
