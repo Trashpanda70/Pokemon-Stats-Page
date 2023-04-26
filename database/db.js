@@ -2,8 +2,6 @@ const sqlite3 = require('sqlite3').verbose();
 const ServerError = require('../utils/ServerError');
 const util = require('../utils/UtilityFunctions');
 
-let defaultPath = './database/db-files/pokemon.db';
-
 exports.moveColumns = ['m_name',
   'm_type',
   'm_category',
@@ -25,7 +23,7 @@ exports.pokeColumns = ['p_name',
   'p_egg_groups'];
 
 /* ----------------------------- OPEN/CLOSE OPERATIONS ----------------------------- */
-//open database connection
+/** open database connection*/
 function connect(path) {
   return new sqlite3.Database(path, (err) => {
     if (err) {
@@ -35,7 +33,7 @@ function connect(path) {
   });
 }
 
-//close database connection
+/** close database connection */
 async function close(db) {
   return await new Promise((resolve, reject) =>
     db.close((err) => {
@@ -48,13 +46,12 @@ async function close(db) {
 }
 
 /* ----------------------------- GET OPERATIONS ----------------------------- */
-/*
-  db - database object
+/**
   command - sql command to execute as a string
   args - array of arguments to give to SQL command (replace ? in command)
   path - path to db file
 */
-exports.execGetCommand = (command, args = [], path = defaultPath) => {
+exports.execGetCommand = (command, args = [], path) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -80,13 +77,12 @@ exports.execGetCommand = (command, args = [], path = defaultPath) => {
   });
 };
 
-/*
-  db is database object
+/**
   command is sql command to execute as a string
   callback is the callback function to pass to db.get
   args is array of arguments to give to SQL command (replace ? in command)
 */
-exports.execAllCommand = (command, args = [], path = defaultPath) => {
+exports.execAllCommand = (command, args = [], path) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -116,13 +112,9 @@ exports.execAllCommand = (command, args = [], path = defaultPath) => {
   });
 };
 
-// - all() method is used when you need to fetch and process all rows from the result set at once
-// - each() method is used when you need to fetch and process each row from the result set one by one
-// - get() method is used when you need to fetch and process only the first row from the result set
-
 /* ----------------------------- GENERAL RUN OPERATION ----------------------------- */
-// Run a command without need for a return or success / fail
-exports.runCommand = (command, path = defaultPath) => {
+/** Run a command without need for a return or success / fail */
+exports.runCommand = (command, path) => {
   exports.name = function name(args) {
     return new Promise((resolve, reject) => {
       let db = connect(path);
@@ -143,7 +135,7 @@ exports.runCommand = (command, path = defaultPath) => {
 };
 
 /* ----------------------------- POST (add new) OPERATIONS ----------------------------- */
-/* 
+/**
   Insert data into the specified table
   table - table to insert into
   columns - names of columns to insert data into
@@ -152,7 +144,7 @@ exports.runCommand = (command, path = defaultPath) => {
   Example of what the command is doing:
   INSERT INTO table1 (height, color, ...) VALUES (50, blue , ...)
 */
-exports.insertDataRow = (table, columns, values, placeholders = false, path = defaultPath) => {
+exports.insertDataRow = (table, columns, values, placeholders = false, path) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -180,7 +172,7 @@ exports.insertDataRow = (table, columns, values, placeholders = false, path = de
   });
 };
 
-/* 
+/** 
   Insert multiple data rows into the specified table
   table - table to insert into
   columns - names of columns to insert data into
@@ -190,7 +182,7 @@ exports.insertDataRow = (table, columns, values, placeholders = false, path = de
   Example of what the command is doing:
   INSERT INTO table1 (height, color, ...) VALUES (50, blue , ...), (45, red, ...), ...
 */
-exports.insertDataManyRows = (table, columns, values, placeholders = false, path = defaultPath) => {
+exports.insertDataManyRows = (table, columns, values, placeholders = false, path) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -227,31 +219,45 @@ exports.insertDataManyRows = (table, columns, values, placeholders = false, path
 
 
 /* ----------------------------- PUT (update) OPERATIONS ----------------------------- */
-/* 
+/** 
   Update a single element of data, or multiple elements depending on the value of condition. Uses wildcards for the
-  values for secure data entry
+  values for sanitization
   table - table to perform the update on
   cols - names of columns to update the data of (array)
   values - data to use for updating, must be the same length as the cols array
   condition - A string representing the condition to use for the update. If one is not specified or a falsy value
-  is given, then the update goes for all rows of the table.
+  is given, then the update goes for all rows of the table. NOTE: Do not include the 'WHERE' keyword, it will be added.
   Example of what the command is doing:
   UPDATE table SET cols[0] = values[0], 
                    cols[1] = values[1],
                    ...
                WHERE condition
 */
-exports.updateData = (table, cols, values, condition = null, path = defaultPath) => {
+exports.updateData = (table, columns, values, condition = null, path) => {
   return new Promise((resolve, reject) => {
-    let db = connect();
+    let db = connect(path);
     if (!db)
       reject(new ServerError("Could not connect to database. Please report this."));
     try {
       //ensure cols and values are arrays with the same length
-
+      if (!util.haveSameLength(columns, values)) {
+        reject(new ServerError("Command did not provide same number of columns and values to insert", 400));
+      }
       //prepare cols and values
-      let vals = '(' + values.map((v) => v).join(',') + ')';
-      let cols = '(' + cols.map((c) => c).join(',') + ')';
+      let vals = values.map((v) => `?,`);
+      vals[vals.length - 1] = vals[vals.length - 1].substring(0, 1);
+      let cols = columns.map((c) => `${c} = `);
+      //for each element in array 1, accumulate into an initially empty string the current value processed and the necessary
+      //vals array value at the same index. Thanks ChatGPT for that one
+      const setString = cols.reduce((acc, curr, index) => acc + curr + vals[index], '');
+      const conditionString = condition ? `WHERE ${condition}` : '';
+      //build sql command and run
+      let sql = `UPDATE ${table} SET ${setString} ${conditionString};`;
+      console.log(sql);
+      db.run(sql, values, (err) => {
+        if (err)
+          reject(err);
+      });
       close(db).catch(err => { throw new ServerError(err); });
       resolve();
     } catch (err) {
@@ -262,18 +268,18 @@ exports.updateData = (table, cols, values, condition = null, path = defaultPath)
 };
 
 /* ----------------------------- DELETE (delete) OPERATIONS ----------------------------- */
-exports.deleteData = (table, all = false, path = defaultPath) => {
+exports.deleteData = (table, all = false, path) => {
   return new Promise((resolve, reject) => {
-    let db = connect();
+    let db = connect(path);
     if (!db)
       reject(new ServerError("Could not connect to database. Please report this."));
     try {
       if (all) {
-        db.run(`DELETE FROM ${table}`, (err) => {
+        db.run(`DELETE FROM ${table};`, [], (err) => {
           if (err)
             reject(err);
         });
-        db.run(`VACUUM`, (err) => {
+        db.run(`VACUUM;`, [], (err) => {
           if (err)
             reject(err);
         });

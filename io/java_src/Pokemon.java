@@ -8,7 +8,7 @@ public record Pokemon(String name, String types, String baseStats, String evs, S
                 space + "p_base_stats: \"" + baseStats + "\"\n" +
                 space + "p_evs: \"" + evs + "\"\n" +
                 space + "p_abilities: " + abilities + "\n" +
-                space + "p_hidden_abilities: " + types + "\n" +
+                space + "p_hidden_abilities: " + hiddenAbilities + "\n" +
                 space + "p_move_levels: \"" + moveLevels + "\"\n" +
                 space + "p_moves: " + moves + "\n" +
                 space + "p_tutor_moves: " + tutorMoves + "\n" +
