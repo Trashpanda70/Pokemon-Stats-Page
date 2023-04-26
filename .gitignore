@@ -4,3 +4,4 @@ ztest/
 java/out/
 JavaIO/.idea/
 JavaIO/target/
+.vscode/
