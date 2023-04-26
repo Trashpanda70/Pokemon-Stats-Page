@@ -5,21 +5,21 @@ Names:
   - Bug Buzz
 
 Moves:
-  Megahorn:
+  - name: Megahorn
     type: bug
     category: Physical
     power: 120
     accuracy: 85
     pp: 10
     description: "Using its tough and impressive horn, the user rams into the target with no letup."
-  Attack Order:
+  - name: Attack Order
     type: bug
     category: Physical
     power: 90
     accuracy: 100
     pp: 15
     description: "The user calls out its underlings to pummel the target. Critical hits land more easily."
-  Bug Buzz:
+  - name: Bug Buzz
     type: bug
     category: Special
     power: 90

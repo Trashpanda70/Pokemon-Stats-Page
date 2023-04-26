@@ -3,16 +3,16 @@ public record Pokemon(String name, String types, String baseStats, String evs, S
     @Override
     public String toString() {
         String space = "    ";
-        return "  " + name + ":" + "\n" +
-                space + "types: " + types + "\n" +
-                space + "base_stats: \"" + baseStats + "\"\n" +
-                space + "evs: \"" + evs + "\"\n" +
-                space + "abilities: " + abilities + "\n" +
-                space + "hidden_abilities: " + types + "\n" +
-                space + "move_levels: \"" + moveLevels + "\"\n" +
-                space + "moves: " + moves + "\n" +
-                space + "tutor_moves: " + tutorMoves + "\n" +
-                space + "egg_moves: " + eggMoves + "\n" +
-                space + "egg_groups: " + eggGroups;
+        return "  - p_name: " + name + "\n" +
+                space + "p_types: " + types + "\n" +
+                space + "p_base_stats: \"" + baseStats + "\"\n" +
+                space + "p_evs: \"" + evs + "\"\n" +
+                space + "p_abilities: " + abilities + "\n" +
+                space + "p_hidden_abilities: " + types + "\n" +
+                space + "p_move_levels: \"" + moveLevels + "\"\n" +
+                space + "p_moves: " + moves + "\n" +
+                space + "p_tutor_moves: " + tutorMoves + "\n" +
+                space + "p_egg_moves: " + eggMoves + "\n" +
+                space + "p_egg_groups: " + eggGroups;
     }
 }
