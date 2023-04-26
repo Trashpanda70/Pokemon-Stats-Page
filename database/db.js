@@ -58,20 +58,20 @@ exports.execGetCommand = (command, path, args = []) => {
       reject(new ServerError("Could not connect to database. Please report this."));
     try {
       let matches = command.match(/\?/g);
-      if (matches && matches != args.length)
-        throw new ServerError("Wrong number of arguments provided for given query. Please report this.", 500);
+      if (matches && matches.length != args.length)
+        reject(new ServerError("Wrong number of arguments provided for given query. Please report this.", 500));
       db.get(command, args, (err, row) => {
         if (err) {
           reject(err);
         }
         if (!row) {
-          throw new ServerError("No data found for given command.", 404);
+          reject(new ServerError("No data found for given command.", 404));
         }
-        close(db).catch(err => { throw new ServerError(err); });
+        close(db).catch(err => { reject(new ServerError(err)); });
         resolve(row);
       });
     } catch (err) {
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       reject(err);
     }
   });
@@ -90,23 +90,23 @@ exports.execAllCommand = (command, path, args = []) => {
     try {
       let matches = command.match(/\?/g);
       if (matches && matches != args.length)
-        throw new ServerError("Wrong number of arguments provided for given query. Please report this.", 500);
+        reject(new ServerError("Wrong number of arguments provided for given query. Please report this.", 500));
       db.all(command, args, (err, rows) => {
         if (err) {
           reject(err);
         }
         if (rows.length == 0) {
-          throw new ServerError("No data found for given command.", 404);
+          reject(new ServerError("No data found for given command.", 404));
         }
         close(db).then(() => {
           resolve(rows);
         }).catch(err => {
-          throw new ServerError(err);
+          reject(new ServerError(err));
         });
         //resolve(rows);
       });
     } catch (err) {
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       reject(err);
     }
   });
@@ -115,23 +115,21 @@ exports.execAllCommand = (command, path, args = []) => {
 /* ----------------------------- GENERAL RUN OPERATION ----------------------------- */
 /** Run a command without need for a return or success / fail */
 exports.runCommand = (command, path) => {
-  exports.name = function name(args) {
-    return new Promise((resolve, reject) => {
-      let db = connect(path);
-      if (!db)
-        reject(new ServerError("Could not connect to database. Please report this."));
-      try {
-        close(db).catch(err => { throw new ServerError(err); });
-        db.run(command, [], (err) => {
-          if (err)
-            reject(err);
-        });
-      } catch (err) {
-        close(db).catch(err => { throw new ServerError(err); });
-        reject(err);
-      }
-    });
-  };
+  return new Promise((resolve, reject) => {
+    let db = connect(path);
+    if (!db)
+      reject(new ServerError("Could not connect to database. Please report this."));
+    try {
+      close(db).catch(err => { reject(new ServerError(err)); });
+      db.run(command, [], (err) => {
+        if (err)
+          reject(err);
+      });
+    } catch (err) {
+      close(db).catch(err => { reject(new ServerError(err)); });
+      reject(err);
+    }
+  });
 };
 
 /* ----------------------------- POST (add new) OPERATIONS ----------------------------- */
@@ -163,10 +161,10 @@ exports.insertDataRow = (table, columns, values, path, placeholders = false) => 
         if (err)
           reject(err);
       });
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       resolve();
     } catch (err) {
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       reject(err);
     }
   });
@@ -208,10 +206,10 @@ exports.insertDataManyRows = (table, columns, values, path, placeholders = false
         if (err)
           reject(err);
       });
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       resolve();
     } catch (err) {
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       reject(err);
     }
   });
@@ -258,10 +256,10 @@ exports.updateData = (table, columns, values, path, condition = null) => {
         if (err)
           reject(err);
       });
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       resolve();
     } catch (err) {
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       reject(err);
     }
   });
@@ -286,10 +284,10 @@ exports.deleteData = (table, path, all = true) => {
         resolve();
       }
       reject(new ServerError("Cannot delete specific rows yet", 501));
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       resolve();
     } catch (err) {
-      close(db).catch(err => { throw new ServerError(err); });
+      close(db).catch(err => { reject(new ServerError(err)); });
       reject(err);
     }
   });

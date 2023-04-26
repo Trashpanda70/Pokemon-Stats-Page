@@ -2,6 +2,6 @@ node_modules/
 database/db-files/
 ztest/
 java/out/
-JavaIO/.idea/
-JavaIO/target/
+io/.idea/
+io/target/
 .vscode/
