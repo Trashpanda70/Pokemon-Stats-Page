@@ -1,27 +1,9 @@
+const PORT = 8080;
 const express = require('express');
 const app = express();
-const db = require('./database/db');
-const PORT = 8080;
-
-//make express use json so it can parse correctly
-app.use(express.json());
-//start app
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-//req is request (incoming data)
-//res is response (outgoing data)
-/* ------------------ Endpoints ------------------ */
-
-//get all
-app.get('/todos', async (req, res) => {
-  let cmd = 'select * from todolist;';
-  let data = await db.execAllCommand(cmd).then(data => {
-    console.log(data);
-    res.status(200).send({ data });
-  }).catch(err => {
-    res.status(err.status).send({ msg: err.message });
-  });
-});
+app.use(express.json()); //make express use json so it can parse correctly
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`)); //start app
+require('./endpoints/moves')(app); //import the exported function and call it with app
 
 app.post('/todos/:id', (req, res) => {
   const { id } = req.params;

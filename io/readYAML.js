@@ -27,10 +27,10 @@ exports.readMoves = async () => {
     moves[moves.length - 1][6] = `'${move.m_description}'`;
   }
   //scuffed? yeah. Guaranteed to work? also yeah
-  await db.deleteData('moves', true, dbPath).catch(err => {
+  await db.deleteData('moves', dbPath).catch(err => {
     console.log(err);
   });
-  await db.insertDataManyRows('moves', db.moveColumns, moves, false, dbPath).catch(err => {
+  await db.insertDataManyRows('moves', db.moveColumns, moves, dbPath).catch(err => {
     console.log(err);
   });
 };
@@ -71,10 +71,10 @@ exports.readPokemon = async () => {
     pokemon[pokemon.length - 1][10] = `'${poke.p_egg_groups}'`;
   }
   //scuffed? yeah. Guaranteed to work? also yeah
-  await db.deleteData('pokemon', true, dbPath).catch(err => {
+  await db.deleteData('pokemon', dbPath).catch(err => {
     console.log(err);
   });
-  await db.insertDataManyRows('pokemon', db.pokeColumns, pokemon, false, dbPath).catch(err => {
+  await db.insertDataManyRows('pokemon', db.pokeColumns, pokemon, dbPath).catch(err => {
     console.log(err);
   });
 };

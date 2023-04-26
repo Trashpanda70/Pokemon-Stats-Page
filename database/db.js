@@ -51,7 +51,7 @@ async function close(db) {
   args - array of arguments to give to SQL command (replace ? in command)
   path - path to db file
 */
-exports.execGetCommand = (command, args = [], path) => {
+exports.execGetCommand = (command, path, args = []) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -82,7 +82,7 @@ exports.execGetCommand = (command, args = [], path) => {
   callback is the callback function to pass to db.get
   args is array of arguments to give to SQL command (replace ? in command)
 */
-exports.execAllCommand = (command, args = [], path) => {
+exports.execAllCommand = (command, path, args = []) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -144,7 +144,7 @@ exports.runCommand = (command, path) => {
   Example of what the command is doing:
   INSERT INTO table1 (height, color, ...) VALUES (50, blue , ...)
 */
-exports.insertDataRow = (table, columns, values, placeholders = false, path) => {
+exports.insertDataRow = (table, columns, values, path, placeholders = false) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -182,7 +182,7 @@ exports.insertDataRow = (table, columns, values, placeholders = false, path) => 
   Example of what the command is doing:
   INSERT INTO table1 (height, color, ...) VALUES (50, blue , ...), (45, red, ...), ...
 */
-exports.insertDataManyRows = (table, columns, values, placeholders = false, path) => {
+exports.insertDataManyRows = (table, columns, values, path, placeholders = false) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -233,7 +233,7 @@ exports.insertDataManyRows = (table, columns, values, placeholders = false, path
                    ...
                WHERE condition
 */
-exports.updateData = (table, columns, values, condition = null, path) => {
+exports.updateData = (table, columns, values, path, condition = null) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
@@ -268,7 +268,7 @@ exports.updateData = (table, columns, values, condition = null, path) => {
 };
 
 /* ----------------------------- DELETE (delete) OPERATIONS ----------------------------- */
-exports.deleteData = (table, all = false, path) => {
+exports.deleteData = (table, path, all = true) => {
   return new Promise((resolve, reject) => {
     let db = connect(path);
     if (!db)
