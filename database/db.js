@@ -89,13 +89,13 @@ exports.execAllCommand = (command, path, args = []) => {
       reject(new ServerError("Could not connect to database. Please report this."));
     try {
       let matches = command.match(/\?/g);
-      if (matches && matches != args.length)
+      if (matches && matches.length != args.length)
         reject(new ServerError("Wrong number of arguments provided for given query. Please report this.", 500));
       db.all(command, args, (err, rows) => {
         if (err) {
           reject(err);
         }
-        if (rows.length == 0) {
+        if (!rows || rows.length == 0) {
           reject(new ServerError("No data found for given command.", 404));
         }
         close(db).then(() => {
@@ -120,11 +120,12 @@ exports.runCommand = (command, path) => {
     if (!db)
       reject(new ServerError("Could not connect to database. Please report this."));
     try {
-      close(db).catch(err => { reject(new ServerError(err)); });
       db.run(command, [], (err) => {
         if (err)
           reject(err);
       });
+      close(db).catch(err => { reject(new ServerError(err)); });
+      resolve();
     } catch (err) {
       close(db).catch(err => { reject(new ServerError(err)); });
       reject(err);
@@ -246,7 +247,7 @@ exports.updateData = (table, columns, values, path, condition = null) => {
       vals[vals.length - 1] = vals[vals.length - 1].substring(0, 1);
       let cols = columns.map((c) => `${c} = `);
       //for each element in array 1, accumulate into an initially empty string the current value processed and the necessary
-      //vals array value at the same index. Thanks ChatGPT for that one
+      //vals array value at the same index. 
       const setString = cols.reduce((acc, curr, index) => acc + curr + vals[index], '');
       const conditionString = condition ? `WHERE ${condition}` : '';
       //build sql command and run

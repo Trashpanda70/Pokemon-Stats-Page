@@ -13,12 +13,20 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "poke-types": "^1.0.22",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "yaml": "^2.2.2"
   },
   "devDependencies": {
     "eslint": "^8.37.0",
-    "jest": "^29.5.0"
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3"
   },
   "description": "",
-  "eslintIgnore": ["*.test.js"]
+  "eslintIgnore": [
+    "*.test.js"
+  ],
+  "jest": {
+    "globalSetup": "./test-files/jest-setup.js",
+    "globalTeardown": "./test-files/jest-teardown.js"
+  }
 }

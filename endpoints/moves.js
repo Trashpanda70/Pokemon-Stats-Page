@@ -2,9 +2,9 @@ const { getTypeWeaknesses } = require('poke-types');
 const { noEffect, notVeryEffective, superEffective, ultraEffective } = require('poke-types/effectiveness');
 const db = require('../database/db');
 
-const path = "./database/db-files/test.db";
+//Specify path for testing, default will be the database file
+module.exports = function (app, path = "./database/db-files/moves.db") {
 
-module.exports = function (app) {
   /**
    * Need to specify the move name as a query in order to access
    */
@@ -123,7 +123,7 @@ function getWhereString(q) {
     valueEntries.push(q.maxaccuracy);
     strEntries.push('m_accuracy <= ?');
   }
-  //compile the where clause. Thanks ChatGPT
+  //compile the where clause. 
   let str = strEntries.reduce((acc, curr, i) => {
     if (i == strEntries.length - 1) return `${acc}${curr}`;
     return `${acc}${curr} AND `;

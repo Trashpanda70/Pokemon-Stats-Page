@@ -1,0 +1,36 @@
+---
+Names:
+  - Megahorn
+  - Attack Order
+  - Thunder Wave
+  - Earthquake
+
+Moves:
+  - m_name: Megahorn
+    m_type: bug
+    m_category: Physical
+    m_power: 120
+    m_accuracy: 85
+    m_pp: 10
+    m_description: "Using its tough and impressive horn, the user rams into the target with no letup."
+  - m_name: Attack Order
+    m_type: bug
+    m_category: Physical
+    m_power: 90
+    m_accuracy: 100
+    m_pp: 15
+    m_description: "The user calls out its underlings to pummel the target. Critical hits land more easily."
+  - m_name: Thunder Wave
+    m_type: electric
+    m_category: Status
+    m_power: 0
+    m_accuracy: 90
+    m_pp: 20
+    m_description: "A weak electric charge is launched at the target. It causes paralysis if it hits."
+  - m_name: Earthquake
+    m_type: ground
+    m_category: Physical
+    m_power: 100
+    m_accuracy: 100
+    m_pp: 10
+    m_description: "The user sets off an earthquake that strikes every Pokémon around it."

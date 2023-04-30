@@ -3,14 +3,15 @@ const yaml = require('yaml');
 const fs = require('fs');
 const db = require('../database/db');
 const yamlPath = './output-files';
-const dbPath = '../database/db-files/test.db';
+const dbPathMoves = '../database/db-files/moves.db';
+const dbPathPokemon = '../database/db-files/pokemon.db';
 
 /**
  * Reads the moves.yml file and stores the results in the database
  * Database is reset each time since its pretty quick and simple (as opposed to checking if it needs update, just do the 2 calls)
  */
-exports.readMoves = async () => {
-  const buildYamlContent = await fs.promises.readFile(`${yamlPath}/moves.yml`, 'utf8');
+exports.readMoves = async (dbPath = dbPathMoves, readPath = `${yamlPath}/moves.yml`) => {
+  const buildYamlContent = await fs.promises.readFile(readPath, 'utf8');
   const file = yaml.parse(buildYamlContent);
   let moves = [];
   for (let move of file.Moves) {
@@ -39,8 +40,8 @@ exports.readMoves = async () => {
  * Reads the pokemon.yml file and stores the results in the database
  * Database is reset each time since its pretty quick and simple (as opposed to checking if it needs update, just do the 2 calls)
  */
-exports.readPokemon = async () => {
-  const buildYamlContent = await fs.promises.readFile(`${yamlPath}/pokemon.yml`, 'utf8');
+exports.readPokemon = async (dbPath = dbPathPokemon, readPath = `${yamlPath}/pokemon.yml`) => {
+  const buildYamlContent = await fs.promises.readFile(readPath, 'utf8');
   const file = yaml.parse(buildYamlContent);
   let pokemon = [];
   for (let poke of file.Pokemon) {
