@@ -9,10 +9,11 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
   app.get('/pokemon/:name', async (req, res) => {
     const { name } = req.params;
     if (name) {
-      let cmd = `SELECT * FROM pokemon WHERE m_name = ?;`;
+      let cmd = `SELECT * FROM pokemon WHERE p_name = ?;`;
       await db.execGetCommand(cmd, path, [name]).then((data) => {
         res.status(200).send({ data });
       }).catch(err => {
+        console.log('stat:', err.status, 'ERR: ', err.message);
         res.status(err.status).send({ msg: err.message });
       });
     } else {
@@ -30,17 +31,17 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
   app.get('/pokemon', async (req, res) => {
     const q = req.query;
     let cmd = 'select * from pokemon;';
-    await db.execAllCommand(cmd, path).then(data => {
+    await db.execAllCommand(cmd, path).then((data) => {
       //no query
-      if (Object.keys(q).length === 0) {
+      if (Object.keys(q).length == 0) {
         res.status(200).send({ data });
       } else {
-        let data = handleStatsQuery(q, data);
+        data = handleStatsQuery(q, data);
         //length 0 means nothing matches query
         if (data.length == 0) {
           res.status(404).send({ msg: `No Pokemon match base stat total query, or query was invalid.` });
         } else {
-          res.status(200).send({ data: data });
+          res.status(200).send({ data });
         }
       }
     }).catch(err => {
@@ -55,17 +56,17 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
    * - stats = stat total to search for
    * - higheststats = highest stat total to search for
    */
-  app.get('/pokemon/:type', async (res, req) => {
+  app.get('/pokemon/type/:type', async (req, res) => {
     const { type } = req.params;
     const q = req.query;
     if (type) {
-      let cmd = 'select * from pokemon where type = ?';
-      await db.execAllCommand(cmd, path, [type]).then(data => {
+      let cmd = "select * from pokemon where instr(p_types, ?) > 0;";
+      await db.execAllCommand(cmd, path, [type]).then((data) => {
         //no query
-        if (Object.keys(q).length === 0) {
+        if (Object.keys(q).length == 0) {
           res.status(200).send({ data });
         } else {
-          let data = handleStatsQuery(q, data);
+          data = handleStatsQuery(q, data);
           //length 0 means nothing matches query
           if (data.length == 0) {
             res.status(404).send({ msg: `No ${type} type Pokemon match base stat total query, or query was invalid.` });
@@ -74,6 +75,9 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
           }
         }
       }).catch(err => {
+        if (!err.status)
+          err.status = 502;
+        console.log(err.message);
         res.status(err.status).send({ msg: err.message });
       });
     } else {
@@ -84,10 +88,10 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
   /**
    * Get the type defenses of a particular pokemon.
    */
-  app.get('/pokemon/:name/defenses', async (res, req) => {
+  app.get('/pokemon/:name/defenses', async (req, res) => {
     const { name } = req.params;
     if (name) {
-      let cmd = `SELECT * FROM pokemon WHERE m_name = ?;`;
+      let cmd = `SELECT * FROM pokemon WHERE p_name = ?;`;
       await db.execGetCommand(cmd, path, [name]).then((data) => {
         let types = data.p_types.split(',');
         let defenses = [];
@@ -102,6 +106,8 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
           res.status(500).send({ msg: `Pokemon ${name} has invalid type(s)` });
         }
       }).catch(err => {
+        if (!err.status)
+          err.status = 505;
         res.status(err.status).send({ msg: err.message });
       });
     } else {

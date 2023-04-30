@@ -55,7 +55,7 @@ public class FileToYaml {
                 moveNames.delete(moveNames.length() - 1, moveNames.length());
                 moveLevels.delete(moveLevels.length() - 1, moveLevels.length());
                 //join types together
-                String types = type1 + "," + type2;
+                String types = "".equals(type2) ? type1 : type1 + "," + type2;
                 names.add(name);
                 pokemon.add(new Pokemon(name, types, stats, evs, abils, hiddenAbils, moveLevels.toString(),
                         moveNames.toString(), tutorMoves, eggMoves, eggGroups));

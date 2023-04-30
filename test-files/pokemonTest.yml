@@ -45,7 +45,7 @@ Pokemon:
     p_egg_moves: null
     p_egg_groups: Monster,Grass
   - p_name: Charmander
-    p_types: fire,
+    p_types: fire
     p_base_stats: "39,52,43,65,60,50"
     p_evs: "0,0,0,1,0,0"
     p_abilities: blaze
@@ -56,7 +56,7 @@ Pokemon:
     p_egg_moves: aircutter,ancientpower,beatup,bellydrum,bite,counter,crunch,dragondance,dragonpulse,dragonrush,flareblitz,focuspunch,metalclaw,outrage
     p_egg_groups: Monster,Dragon
   - p_name: Charmeleon
-    p_types: fire,
+    p_types: fire
     p_base_stats: "58,64,58,80,80,65"
     p_evs: "0,0,0,1,1,0"
     p_abilities: blaze
@@ -78,7 +78,7 @@ Pokemon:
     p_egg_moves: null
     p_egg_groups: Monster,Dragon
   - p_name: Squirtle
-    p_types: water,
+    p_types: water
     p_base_stats: "44,48,65,43,50,64"
     p_evs: "0,0,1,0,0,0"
     p_abilities: torrent
@@ -89,7 +89,7 @@ Pokemon:
     p_egg_moves: aquajet,aquaring,aurasphere,brine,dragonpulse,fakeout,flail,foresight,haze,mirrorcoat,mist,mudsport,muddywater,refresh,waterspout,yawn
     p_egg_groups: Monster,Water1
   - p_name: Wartortle
-    p_types: water,
+    p_types: water
     p_base_stats: "59,63,80,58,65,80"
     p_evs: "0,0,1,0,0,1"
     p_abilities: torrent
@@ -100,7 +100,7 @@ Pokemon:
     p_egg_moves: null
     p_egg_groups: Monster,Water1
   - p_name: Blastoise
-    p_types: water,
+    p_types: water
     p_base_stats: "79,83,100,78,85,105"
     p_evs: "0,0,0,0,0,3"
     p_abilities: torrent
