@@ -13,6 +13,7 @@ describe('testing moves API', () => {
 
   test("all moves", async () => {
     const res = await request(app).get('/moves');
+
     expect(res.statusCode).toBe(200);
     //4 moves
     expect(res.body.data.length).toBe(4);
@@ -106,7 +107,7 @@ describe('testing moves API', () => {
 
   test('query for single move', async () => {
     //Megahorn
-    const res = await request(app).get('/move').query({ name: 'Megahorn' });
+    const res = await request(app).get('/moves/Megahorn');
     expect(res.statusCode).toBe(200);
     expect(res.body.data).toBeDefined();
     let m = res.body.data;
@@ -118,7 +119,7 @@ describe('testing moves API', () => {
     expect(m.m_description).toBeDefined();
 
     //Thunder Wave
-    const res2 = await request(app).get('/move').query({ name: 'Thunder Wave' });
+    const res2 = await request(app).get('/moves/Thunder%20Wave');
     expect(res2.statusCode).toBe(200);
     expect(res2.body.data).toBeDefined();
     m = res2.body.data;

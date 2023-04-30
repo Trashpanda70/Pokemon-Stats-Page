@@ -1,17 +1,16 @@
-const { getTypeWeaknesses } = require('poke-types');
-const { noEffect, notVeryEffective, superEffective, ultraEffective } = require('poke-types/effectiveness');
 const db = require('../database/db');
 
 //Specify path for testing, default will be the database file
 module.exports = function (app, path = "./database/db-files/moves.db") {
 
   /**
-   * Need to specify the move name as a query in order to access
+   * Get a single move via it's name
    */
-  app.get('/move', async (req, res) => {
-    if (req.query.name) {
+  app.get('/moves/:name', async (req, res) => {
+    const { name } = req.params;
+    if (name) {
       let cmd = `SELECT * FROM moves WHERE m_name = ?;`;
-      await db.execGetCommand(cmd, path, [req.query.name]).then((data) => {
+      await db.execGetCommand(cmd, path, [name]).then((data) => {
         res.status(200).send({ data });
       }).catch(err => {
         res.status(err.status).send({ msg: err.message });
@@ -80,7 +79,7 @@ module.exports = function (app, path = "./database/db-files/moves.db") {
  */
 function getWhereString(q) {
   //no queries
-  if (!q) {
+  if (Object.keys(q).length === 0) {
     return ['', []];
   }
   let strEntries = [];
