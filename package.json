@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "eslint . && jest",
+    "test": "eslint . && jest --runInBand",
     "start": "node index.js"
   },
   "keywords": [],
@@ -24,9 +24,5 @@
   "description": "",
   "eslintIgnore": [
     "*.test.js"
-  ],
-  "jest": {
-    "globalSetup": "./test-files/jest-setup.js",
-    "globalTeardown": "./test-files/jest-teardown.js"
-  }
+  ]
 }

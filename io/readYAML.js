@@ -2,6 +2,7 @@
 const yaml = require('yaml');
 const fs = require('fs');
 const db = require('../database/db');
+const { resolve } = require('path');
 const yamlPath = './output-files';
 const dbPathMoves = '../database/db-files/moves.db';
 const dbPathPokemon = '../database/db-files/pokemon.db';

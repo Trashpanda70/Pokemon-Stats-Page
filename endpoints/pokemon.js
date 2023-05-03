@@ -13,7 +13,8 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
       await db.execGetCommand(cmd, path, [name]).then((data) => {
         res.status(200).send({ data });
       }).catch(err => {
-        console.log('stat:', err.status, 'ERR: ', err.message);
+        if (!err.status)
+          err.status = 520;
         res.status(err.status).send({ msg: err.message });
       });
     } else {
@@ -39,12 +40,14 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
         data = handleStatsQuery(q, data);
         //length 0 means nothing matches query
         if (data.length == 0) {
-          res.status(404).send({ msg: `No Pokemon match base stat total query, or query was invalid.` });
+          res.status(405).send({ msg: `No Pokemon match base stat total query, or query was invalid.` });
         } else {
           res.status(200).send({ data });
         }
       }
     }).catch(err => {
+      if (!err.status)
+        err.status = 520;
       res.status(err.status).send({ msg: err.message });
     });
   });
@@ -76,8 +79,7 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
         }
       }).catch(err => {
         if (!err.status)
-          err.status = 502;
-        console.log(err.message);
+          err.status = 520;
         res.status(err.status).send({ msg: err.message });
       });
     } else {
@@ -100,14 +102,15 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
         } else if (types.length == 2) {
           defenses = getTypeWeaknesses(types[0], types[1]);
         }
-        if (defenses.length > 0) {
-          res.status(200).send({ data: types });
-        } else {
+        if (Object.keys(defenses).length > 0) {
+          res.status(200).send({ data: defenses });
+        }
+        else {
           res.status(500).send({ msg: `Pokemon ${name} has invalid type(s)` });
         }
       }).catch(err => {
         if (!err.status)
-          err.status = 505;
+          err.status = 520;
         res.status(err.status).send({ msg: err.message });
       });
     } else {

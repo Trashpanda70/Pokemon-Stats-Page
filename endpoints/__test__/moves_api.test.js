@@ -1,4 +1,6 @@
 const request = require('supertest');
+const db = require('../../database/db');
+const InputData = require('../../io/readYAML');
 
 //construct test app
 const express = require('express');
@@ -10,6 +12,14 @@ require('../moves')(app, 'test-files/test.db');
 
 //tests
 describe('testing moves API', () => {
+
+  beforeAll(async () => {
+    let cmd = 'CREATE TABLE IF NOT EXISTS moves(m_name TEXT PRIMARY KEY,m_type TEXT NOT NULL,m_category TEXT NOT NULL,';
+    cmd += 'm_power INTEGER DEFAULT 0,m_accuracy INTEGER DEFAULT 100,m_pp INTEGER NOT NULL,m_description TEXT NOT NULL);';
+    await db.runCommand(cmd, `test-files/test.db`);
+    await InputData.readMoves(`test-files/test.db`, `test-files/movesTest.yml`);
+    await new Promise(resolve => setTimeout(resolve, 500)); //idk bro 
+  });
 
   test("all moves", async () => {
     const res = await request(app).get('/moves');

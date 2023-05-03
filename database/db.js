@@ -95,7 +95,7 @@ exports.execAllCommand = (command, path, args = []) => {
         if (err) {
           reject(err);
         }
-        if (!rows || rows.length == 0) {
+        if (rows.length == 0) {
           reject(new ServerError("No data found for given command.", 404));
         }
         close(db).then(() => {
@@ -274,13 +274,15 @@ exports.deleteData = (table, path, all = true) => {
       reject(new ServerError("Could not connect to database. Please report this."));
     try {
       if (all) {
-        db.run(`DELETE FROM ${table};`, [], (err) => {
-          if (err)
-            reject(err);
-        });
-        db.run(`VACUUM;`, [], (err) => {
-          if (err)
-            reject(err);
+        db.serialize(() => {
+          db.run(`DELETE FROM ${table};`, [], (err) => {
+            if (err)
+              reject(err);
+          });
+          db.run(`VACUUM;`, [], (err) => {
+            if (err)
+              reject(err);
+          });
         });
         resolve();
       }
