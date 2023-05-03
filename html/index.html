@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Silly Little Pokemon Tool</title>
+  </head>
+  <style>
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .image-container {
+      display: inline-block;
+      text-align: center;
+      vertical-align: top;
+      margin: 5px;
+    }
+
+    .image {
+      width: 150px;
+      height: 150px;
+    }
+
+    .label {
+      display: block;
+      margin-top: 5px;
+    }
+
+    header {
+      text-align: center;
+    }
+  </style>
+  <header>
+    <h1>Pokemon Stats Page for my (unnamed) Pokemon game!</h1>
+    <h3>
+      Look at Pokemon stats and their moves here. There are changes from the
+      base games.
+    </h3>
+    <h6>Search bar maybe coming soon (just use control+f idk)</h6>
+  </header>
+  <div class="container"></div>
+
+  <script>
+    async function loadData() {
+      let ret = await fetch("/pokemon-names");
+      names = await ret.json();
+      return names.data;
+    }
+
+    (async () => {
+      //select the div to edit
+      var container = document.querySelector(".container");
+      //get names
+      let names = await loadData();
+      console.log(names);
+      //create images/labels
+      for (let i = 1; i < 652; i++) {
+        //main div
+        let div = document.createElement("div");
+        div.className = "image-container";
+        //image
+        let image = document.createElement("img");
+        let str = i < 10 ? "00" : i < 100 ? "0" : "";
+        image.src = `/pokemon/${str}${i}.png`;
+        image.className = "image";
+        //label
+        let label = document.createElement("a");
+        label.href = "#";
+        label.textContent = names[i - 1];
+        label.className = "label";
+        //append
+        div.appendChild(image);
+        div.appendChild(label);
+        container.appendChild(div);
+      }
+    })();
+  </script>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+  </body>
+</html>

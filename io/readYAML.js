@@ -2,10 +2,9 @@
 const yaml = require('yaml');
 const fs = require('fs');
 const db = require('../database/db');
-const { resolve } = require('path');
-const yamlPath = './output-files';
-const dbPathMoves = '../database/db-files/moves.db';
-const dbPathPokemon = '../database/db-files/pokemon.db';
+const yamlPath = './io/output-files';
+const dbPathMoves = './database/db-files/moves.db';
+const dbPathPokemon = './database/db-files/pokemon.db';
 
 /**
  * Reads the moves.yml file and stores the results in the database
@@ -79,4 +78,10 @@ exports.readPokemon = async (dbPath = dbPathPokemon, readPath = `${yamlPath}/pok
   await db.insertDataManyRows('pokemon', db.pokeColumns, pokemon, dbPath).catch(err => {
     console.log(err);
   });
+};
+
+exports.readPokemonNames = (readPath = `${yamlPath}/pokemon.yml`) => {
+  const buildYamlContent = fs.readFileSync(readPath, 'utf8');
+  const file = yaml.parse(buildYamlContent);
+  return file.Names;
 };

@@ -1,4 +1,6 @@
 const { getTypeWeaknesses } = require('poke-types');
+const { readPokemonNames } = require('../io/readYAML');
+
 //const { noEffect, notVeryEffective, superEffective, ultraEffective } = require('poke-types/effectiveness');
 const db = require('../database/db');
 
@@ -40,7 +42,7 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
         data = handleStatsQuery(q, data);
         //length 0 means nothing matches query
         if (data.length == 0) {
-          res.status(405).send({ msg: `No Pokemon match base stat total query, or query was invalid.` });
+          res.status(404).send({ msg: `No Pokemon match base stat total query, or query was invalid.` });
         } else {
           res.status(200).send({ data });
         }
@@ -115,6 +117,16 @@ module.exports = function (app, path = "./database/db-files/pokemon.db") {
       });
     } else {
       res.status(400).send({ msg: "You must specify a pokemon to search for." });
+    }
+  });
+
+
+  app.get('/pokemon-names', async (req, res) => {
+    const names = readPokemonNames();
+    if (names.length && names.length > 0) {
+      res.status(200).send({ data: names });
+    } else {
+      res.status(500).send({ msg: 'No names were able to be read' });
     }
   });
 };
