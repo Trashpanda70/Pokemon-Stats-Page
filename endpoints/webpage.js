@@ -7,4 +7,8 @@ module.exports = function (app) {
   app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, dir, '/index.html')); // eslint-disable-line no-undef
   });
+  //singular pokemon view
+  app.get('/pokemon.html', (req, res) => {
+    res.sendFile(path.join(__dirname, dir, '/pokemon.html')); // eslint-disable-line no-undef
+  });
 };

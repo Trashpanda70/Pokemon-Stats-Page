@@ -2,44 +2,17 @@
 <html>
   <head>
     <title>Silly Little Pokemon Tool</title>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
-  <style>
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .image-container {
-      display: inline-block;
-      text-align: center;
-      vertical-align: top;
-      margin: 5px;
-    }
-
-    .image {
-      width: 150px;
-      height: 150px;
-    }
-
-    .label {
-      display: block;
-      margin-top: 5px;
-    }
-
-    header {
-      text-align: center;
-    }
-  </style>
   <header>
     <h1>Pokemon Stats Page for my (unnamed) Pokemon game!</h1>
     <h3>
       Look at Pokemon stats and their moves here. There are changes from the
       base games.
     </h3>
-    <h6>Search bar maybe coming soon (just use control+f idk)</h6>
+    <div><label>Search:</label> <input type="text" id="searchp" /></div>
   </header>
+  <!-- Everything gets appended here-->
   <div class="container"></div>
 
   <script>
@@ -54,7 +27,6 @@
       var container = document.querySelector(".container");
       //get names
       let names = await loadData();
-      console.log(names);
       //create images/labels
       for (let i = 1; i < 652; i++) {
         //main div
@@ -63,11 +35,12 @@
         //image
         let image = document.createElement("img");
         let str = i < 10 ? "00" : i < 100 ? "0" : "";
-        image.src = `/pokemon/${str}${i}.png`;
+        str += `${i}`;
+        image.src = `/pictures/pokemon/${str}.png`;
         image.className = "image";
         //label
         let label = document.createElement("a");
-        label.href = "#";
+        label.href = `pokemon.html?name=${names[i - 1]}&num=${str}`;
         label.textContent = names[i - 1];
         label.className = "label";
         //append

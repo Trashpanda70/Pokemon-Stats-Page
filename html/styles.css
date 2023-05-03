@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.image-container {
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  margin: 5px;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+}
+
+.image-single {
+  padding-top: 30px;
+  width: 250px;
+  height: 250px;
+}
+
+.label {
+  display: block;
+  margin-top: 5px;
+}
+
+header {
+  text-align: center;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
