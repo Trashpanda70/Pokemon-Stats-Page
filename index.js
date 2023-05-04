@@ -9,7 +9,7 @@ const app = express();
 //   await readPokemon();
 // })();
 
-app.use(express.static(__dirname + '/html')); // eslint-disable-line no-undef
+app.use(express.static(__dirname + '/frontend')); // eslint-disable-line no-undef
 app.use(express.json());
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 

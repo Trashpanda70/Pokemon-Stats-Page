@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Silly Little Pokemon Tool</title>
+    <link rel="stylesheet" href="/supplements/styles.css" />
+  </head>
+  <header>
+    <h1 id="head"></h1>
+  </header>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      /**
+       * load page using passed params
+       */
+      function loadPage() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        //pokemon name for header
+        const name = urlParams.get("name");
+        let header = document.getElementById("head");
+        header.textContent = name;
+        //dex number for image
+        let image = document.createElement("img");
+        const str = urlParams.get("num");
+        image.src = `/pictures/pokemon/${str}.png`;
+        image.className = "center image-single";
+        header.append(image);
+        return name;
+      }
+      /**
+       * load pokemon data and type weaknesses
+       */
+      async function loadPokemon(name) {
+        let ret = await fetch(`/pokemon/${name}`);
+        let data = await ret.json();
+        ret = await fetch(`pokemon/${name}/defenses`);
+        let defenses = await ret.json();
+        return [data.data, defenses.data];
+      }
+
+      /**
+       * make string separated by commas into number array. Option for doing swap for SPEED in base stats string
+       */
+      function makeNumArray(arr, baseStats = false) {
+        let nums = arr.split(",").map((str) => {
+          return parseInt(str);
+        });
+        if (baseStats) {
+          let speed = nums[3];
+          nums.splice(3, 1);
+          nums.push(speed);
+        }
+        return nums;
+      }
+
+      /**
+       * Create stats chart
+       */
+      function makeChart(stats) {
+        //determine colors based on stats
+        let colors = [];
+        stats.forEach((element) => {
+          if (element >= 150) colors.push("rgba(4, 135, 83, 1)");
+          else if (element >= 120) colors.push("rgba(16, 156, 11, 1)");
+          else if (element >= 100) colors.push("rgba(70, 184, 13, 1)");
+          else if (element >= 80) colors.push("rgba(167, 196, 22, 1)");
+          else if (element >= 60) colors.push("rgba(237, 162, 33, 1)");
+          else if (element >= 40) colors.push("rgba(219, 87, 15, 1)");
+          else colors.push("rgba(227, 31, 14, 1)");
+        });
+        //create axis labels
+        let labels = [
+          `HP: ${stats[0]}`,
+          `ATTACK: ${stats[1]}`,
+          `DEFENSE: ${stats[2]}`,
+          `SP ATTACK: ${stats[3]}`,
+          `SP DEFENSE: ${stats[4]}`,
+          `SPEED: ${stats[5]}`,
+        ];
+        //create chart
+        const ctx = document.getElementById("statsChart");
+
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: stats,
+                borderWidth: 1,
+                backgroundColor: colors,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              x: {
+                beginAtZero: true,
+                max: 256,
+              },
+            },
+            indexAxis: "y",
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+      }
+
+      (async () => {
+        var container = document.getElementById("start");
+        const name = loadPage();
+        //index 0 = data | index 1 = defenses
+        let arr = await loadPokemon(name);
+        console.log(arr[0]);
+        //make chart and display stat total
+        let stats = makeNumArray(arr[0].p_base_stats, true);
+        makeChart(stats);
+        let total = stats.reduce((acc, curr) => {
+          return acc + curr;
+        }, 0);
+        document.getElementById("total").textContent = `TOTAL: ${total}`;
+      })();
+    </script>
+    <!--chart-->
+    <div style="height: 300px">
+      <canvas id="statsChart"></canvas>
+    </div>
+    <h4 id="total"></h4>
+    <!-- Everything gets appended here-->
+    <div id="start"></div>
+  </body>
+</html>

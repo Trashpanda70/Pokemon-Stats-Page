@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Silly Little Pokemon Tool</title>
+    <link rel="stylesheet" href="/supplements/styles.css" />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <header>
+      <h1>Pokemon Stats Page for my (unnamed) Pokemon game!</h1>
+      <h3>
+        Look at Pokemon stats and their moves here. There are changes from the
+        base games.
+      </h3>
+      <div><label>Search:</label> <input type="text" id="searchp" /></div>
+    </header>
+    <!-- Everything gets appended here-->
+    <div class="container"></div>
+    <script>
+      async function loadData() {
+        let ret = await fetch("/pokemon-names");
+        names = await ret.json();
+        return names.data;
+      }
+
+      (async () => {
+        //select the div to edit
+        var container = document.querySelector(".container");
+        //get names
+        let names = await loadData();
+        //create images/labels
+        for (let i = 1; i < 652; i++) {
+          //main div
+          let div = document.createElement("div");
+          div.className = "image-container";
+          //image
+          let image = document.createElement("img");
+          let str = i < 10 ? "00" : i < 100 ? "0" : "";
+          str += `${i}`;
+          image.src = `/pictures/pokemon/${str}.png`;
+          image.className = "image";
+          //label
+          let label = document.createElement("a");
+          label.href = `pokemon.html?name=${names[i - 1]}&num=${str}`;
+          label.textContent = names[i - 1];
+          label.className = "label";
+          //append
+          div.appendChild(image);
+          div.appendChild(label);
+          container.appendChild(div);
+        }
+      })();
+    </script>
+  </body>
+</html>
