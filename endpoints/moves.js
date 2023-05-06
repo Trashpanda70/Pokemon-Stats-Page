@@ -9,7 +9,7 @@ module.exports = function (app, path = "./database/db-files/moves.db") {
   app.get('/moves/:name', async (req, res) => {
     const { name } = req.params;
     if (name) {
-      let cmd = `SELECT * FROM moves WHERE m_name = ?;`;
+      let cmd = `SELECT * FROM moves WHERE m_name = ? COLLATE NOCASE;`;
       await db.execGetCommand(cmd, path, [name]).then((data) => {
         res.status(200).send({ data });
       }).catch(err => {

@@ -39,7 +39,7 @@ describe('testing moves API', () => {
     });
     //check correct attributes for a move
     const m = res.body.data[3]; //earthquake
-    expect(m.m_name).toBe('Earthquake');
+    expect(m.m_name).toBe('earthquake');
     expect(m.m_type).toBe('ground');
     expect(m.m_power).toBe(100);
     expect(m.m_pp).toBe(10);
@@ -60,7 +60,7 @@ describe('testing moves API', () => {
     expect(m.m_pp).toBeDefined();
     expect(m.m_description).toBeDefined();
     //check correct attributes
-    expect(m.m_name).toBe('Attack Order');
+    expect(m.m_name).toBe('attackorder');
     expect(m.m_type).toBe('bug');
     expect(m.m_power).toBe(90);
   });
@@ -81,11 +81,11 @@ describe('testing moves API', () => {
     });
     //check correct attributes
     let m = res.body.data[0];
-    expect(m.m_name).toBe('Megahorn');
+    expect(m.m_name).toBe('megahorn');
     expect(m.m_type).toBe('bug');
     expect(m.m_power).toBe(120);
     m = res.body.data[1]
-    expect(m.m_name).toBe('Earthquake');
+    expect(m.m_name).toBe('earthquake');
     expect(m.m_type).toBe('ground');
     expect(m.m_power).toBe(100);
   });
@@ -106,22 +106,22 @@ describe('testing moves API', () => {
     });
     //check correct attributes
     let m = res.body.data[0];
-    expect(m.m_name).toBe('Megahorn');
+    expect(m.m_name).toBe('megahorn');
     expect(m.m_type).toBe('bug');
     expect(m.m_power).toBe(120);
     m = res.body.data[1]
-    expect(m.m_name).toBe('Attack Order');
+    expect(m.m_name).toBe('attackorder');
     expect(m.m_type).toBe('bug');
     expect(m.m_power).toBe(90);
   });
 
   test('query for single move', async () => {
     //Megahorn
-    const res = await request(app).get('/moves/Megahorn');
+    const res = await request(app).get('/moves/megahorn');
     expect(res.statusCode).toBe(200);
     expect(res.body.data).toBeDefined();
     let m = res.body.data;
-    expect(m.m_name).toBe('Megahorn');
+    expect(m.m_name).toBe('megahorn');
     expect(m.m_category).toBe('Physical');
     expect(m.m_power).toBe(120);
     expect(m.m_accuracy).toBe(85);
@@ -129,11 +129,11 @@ describe('testing moves API', () => {
     expect(m.m_description).toBeDefined();
 
     //Thunder Wave
-    const res2 = await request(app).get('/moves/Thunder%20Wave');
+    const res2 = await request(app).get('/moves/thunderwave');
     expect(res2.statusCode).toBe(200);
     expect(res2.body.data).toBeDefined();
     m = res2.body.data;
-    expect(m.m_name).toBe('Thunder Wave');
+    expect(m.m_name).toBe('thunderwave');
     expect(m.m_category).toBe('Status');
     expect(m.m_power).toBe(0);
     expect(m.m_accuracy).toBe(90);

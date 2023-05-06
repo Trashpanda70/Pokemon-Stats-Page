@@ -3,11 +3,11 @@ const express = require('express');
 const path = require('path');
 const app = express();
 // read data in
-// const { readMoves, readPokemon } = require('./io/readYAML');
-// (async () => {
-//   await readMoves();
-//   await readPokemon();
-// })();
+const { readMoves, readPokemon } = require('./io/readYAML');
+(async () => {
+  await readMoves();
+  await readPokemon();
+})();
 
 app.use(express.static(__dirname + '/frontend')); // eslint-disable-line no-undef
 app.use(express.json());

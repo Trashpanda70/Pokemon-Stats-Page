@@ -18,7 +18,7 @@
 }
 
 .image-single {
-  padding-top: 30px;
+  padding-top: 20px;
   width: 250px;
   height: 250px;
 }
@@ -36,6 +36,11 @@ header {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.types-top {
+  width: 75px;
+  height: 25px;
 }
 
 .types {
@@ -64,4 +69,9 @@ header {
 .button {
   font-size: 16px;
   color: rgb(236, 244, 8);
+}
+
+.types-table {
+  width: 60px;
+  height: 20px;
 }

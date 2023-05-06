@@ -89,8 +89,8 @@ public class FileToYaml {
                 lineScan.useDelimiter(",");
                 //need to skip some values
                 lineScan.next();
+                name = lineScan.next().toLowerCase();
                 lineScan.next();
-                name = lineScan.next();
                 lineScan.next();
                 power = lineScan.nextInt();
                 type = lineScan.next().toLowerCase();

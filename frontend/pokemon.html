@@ -4,17 +4,29 @@
     <title>Silly Little Pokemon Tool</title>
     <link rel="stylesheet" href="/supplements/styles.css" />
   </head>
-  <header>
-    <h1 id="head"></h1>
-  </header>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       /**
-       * load page using passed params
+       * load pokemon data and type weaknesses
        */
-      function loadPage() {
+      async function loadPokemon() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const name = urlParams.get("name");
+        //load stuff using name
+        let ret = await fetch(`/pokemon/${name}`);
+        let data = await ret.json();
+        ret = await fetch(`pokemon/${name}/defenses`);
+        let defenses = await ret.json();
+        return [data.data, defenses.data];
+      }
+
+      /**
+       * load page using passed params and Pokemon data
+       */
+      async function loadPage(types) {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         //pokemon name for header
@@ -27,18 +39,20 @@
         image.src = `/pictures/pokemon/${str}.png`;
         image.className = "center image-single";
         image.alt = name;
+        //types
+        let typesDiv = document.createElement("div");
+        typesDiv.className = "container";
+        typesDiv.style.marginBottom = "20px";
+        for (t of types) {
+          let img = document.createElement("img");
+          img.src = `/pictures/types/${t}.png`;
+          img.className = "center types-top";
+          img.alt = t;
+          typesDiv.appendChild(img);
+        }
+        //append types and header
+        header.append(typesDiv);
         header.append(image);
-        return name;
-      }
-      /**
-       * load pokemon data and type weaknesses
-       */
-      async function loadPokemon(name) {
-        let ret = await fetch(`/pokemon/${name}`);
-        let data = await ret.json();
-        ret = await fetch(`pokemon/${name}/defenses`);
-        let defenses = await ret.json();
-        return [data.data, defenses.data];
       }
 
       /**
@@ -149,6 +163,7 @@
           let img = document.createElement("img");
           img.className = "types";
           img.src = `/pictures/types/${t}.png`;
+          img.alt = t;
           //button used as label
           let btn = document.createElement("button");
           btn.textContent = defenses[t];
@@ -187,12 +202,126 @@
         }
       }
 
+      /**
+       * Loads the moves learned by level up as well as tutor moves
+       */
+      async function loadMoves(levels, levelNames, tutorNames) {
+        //----LEVEL UP MOVES----
+        const levelBody = document.querySelector("#movesLevel tbody");
+        cols = [
+          "level",
+          "m_name",
+          "m_type",
+          "m_power",
+          "m_accuracy",
+          "m_category",
+          "m_pp",
+          "m_description",
+        ];
+        for (let i = 0; i < levelNames.length; i++) {
+          //get move data
+          let ret = await fetch(`/moves/${levelNames[i]}`);
+          ret = await ret.json();
+          let data = ret.data;
+          const row = document.createElement("tr");
+          row.className = i % 2 == 0 ? "even" : "odd";
+          //fix move data
+          //infinite accuracy or status move without accuracy?
+          if (data["m_accuracy"] == 999) {
+            if (data["m_category"] == "Status") {
+              data["m_accuracy"] = "---";
+            } else {
+              data["m_accuracy"] = "\u221E";
+            }
+          }
+          //0 power goes to blank | 1 power goes to ?
+          if (data["m_power"] == 0) {
+            data["m_power"] = "---";
+          } else if (data["m_power"] == 1) {
+            data["m_power"] = "???";
+          }
+          //create cells for move data
+          for (col of cols) {
+            const cell = document.createElement("td");
+            if (col == "m_description") {
+              cell.className = "last-column";
+            }
+            if (col == "m_type") {
+              let img = document.createElement("img");
+              img.className = "types-table";
+              img.src = `/pictures/types/${data["m_type"]}.png`;
+              img.alt = t;
+              cell.appendChild(img);
+            } else {
+              let text = col == "level" ? levels[i] : data[col];
+              const cellText = document.createTextNode(text);
+              cell.appendChild(cellText);
+            }
+            row.appendChild(cell);
+          }
+          levelBody.append(row);
+        }
+        //----TUTOR MOVES----
+        //very similar but with minor changes
+        const tutorBody = document.querySelector("#movesTutor tbody");
+        cols = [
+          "m_name",
+          "m_type",
+          "m_power",
+          "m_accuracy",
+          "m_category",
+          "m_pp",
+          "m_description",
+        ];
+        for (let i = 0; i < tutorNames.length; i++) {
+          //get move data
+          let ret = await fetch(`/moves/${tutorNames[i]}`);
+          ret = await ret.json();
+          let data = ret.data;
+          const row = document.createElement("tr");
+          row.className = i % 2 == 0 ? "even" : "odd";
+          //fix move data
+          //infinite accuracy or status move without accuracy?
+          if (data["m_accuracy"] == 999) {
+            if (data["m_category"] == "Status") {
+              data["m_accuracy"] = "---";
+            } else {
+              data["m_accuracy"] = "\u221E";
+            }
+          }
+          //0 power goes to blank
+          if (data["m_power"] == 0) {
+            data["m_power"] = "---";
+          }
+          //create cells for move data
+          for (col of cols) {
+            const cell = document.createElement("td");
+            if (col == "m_description") {
+              cell.className = "last-column";
+            }
+            if (col == "m_type") {
+              let img = document.createElement("img");
+              img.className = "types-table";
+              img.src = `/pictures/types/${data["m_type"]}.png`;
+              img.alt = t;
+              cell.appendChild(img);
+            } else {
+              let text = data[col];
+              const cellText = document.createTextNode(text);
+              cell.appendChild(cellText);
+            }
+            row.appendChild(cell);
+          }
+          tutorBody.append(row);
+        }
+      }
+
       (async () => {
-        const name = loadPage();
         //index 0 = data | index 1 = defenses
-        let arr = await loadPokemon(name);
+        let arr = await loadPokemon();
+        loadPage(arr[0].p_types.split(","));
         console.log(arr);
-        //load types while chart being made
+        //load types
         loadTypes(arr[1]);
         //make chart and display stat total
         let stats = makeNumArray(arr[0].p_base_stats, true);
@@ -201,8 +330,17 @@
           return acc + curr;
         }, 0);
         document.getElementById("total").textContent = `TOTAL: ${total}`;
+        loadMoves(
+          makeNumArray(arr[0].p_move_levels, false),
+          arr[0].p_moves.split(","),
+          arr[0].p_tutor_moves.split(",")
+        );
       })();
     </script>
+    <!--top info-->
+    <header>
+      <h1 id="head" class="image-container"></h1>
+    </header>
     <!--Chart-->
     <div style="height: 300px">
       <canvas id="statsChart"></canvas>
@@ -218,10 +356,74 @@
       <div
         id="typesDiv2"
         class="types-container"
-        style="margin-top: 80px"
+        style="margin-top: 80px; margin-bottom: 85px"
       ></div>
     </div>
     <hr />
-    <!--Moves-->
+    <!--Moves by Level Up-->
+    <header>
+      <h2>Moves Learned By Level Up</h2>
+    </header>
+    <style>
+      table {
+        border-collapse: collapse;
+        border-spacing: 10px;
+      }
+      td,
+      th {
+        border: 1px solid black;
+        padding: 10px;
+      }
+      th {
+        border-bottom: 1px solid black;
+      }
+
+      th.last-column,
+      td.last-column {
+        width: 100%;
+      }
+
+      .even {
+        background-color: #d2d2d2;
+      }
+
+      .odd {
+        background-color: #ffffff;
+      }
+    </style>
+    <table id="movesLevel">
+      <thead>
+        <th>Level</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Power</th>
+        <th>Accuracy</th>
+        <th>Category</th>
+        <th>PP</th>
+        <th class="last-column">Description</th>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <hr />
+    <!--Moves by Tutor-->
+    <header>
+      <h2>Moves Learned By Tutor</h2>
+      <h4>Tutor moves include TMs, HMs, and Move Tutors</h4>
+    </header>
+    <table id="movesTutor">
+      <thead>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Power</th>
+        <th>Accuracy</th>
+        <th>Category</th>
+        <th>PP</th>
+        <th class="last-column">Description</th>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <br /><br /><br />
+    <a href="index.html"><button>Home</button></a>
+    <hr />
   </body>
 </html>
