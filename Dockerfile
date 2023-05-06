@@ -10,6 +10,7 @@ WORKDIR /app
 RUN mkdir database/db-files io/output-files
 RUN sqlite3 database/db-files/moves.db <init/moves.sql
 RUN sqlite3 database/db-files/pokemon.db <init/pokemon.sql
+RUN FIRSTRUN=yes node readData.js
 RUN npm install
 CMD npm run start
 # docker build -t pokemon-stats-page .
