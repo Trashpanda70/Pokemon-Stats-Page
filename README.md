@@ -38,7 +38,7 @@ To check for updates you can follow [these instructions](#how-do-i-check-for-upd
 
 To run the app you need to open a shell/terminal on your machine and run the following command:
 
-> `docker run -d -p 8080:2222 -v data:/app/database/db-files --name poke-stats pokemon-stats-page`
+`docker run -d -p 8080:2222 -v data:/app/database/db-files --name poke-stats pokemon-stats-page`
 
 - Then simply open your browser and type `localhost:8080` and the page should be loaded.
 
@@ -84,7 +84,7 @@ If you are unsure of what "open a shell/terminal" means, you can find your shell
 
 If you want to stop the container from running, you can use the following command (in a terminal):
 
-> `docker stop poke-stats`
+`docker stop poke-stats`
 
 - If you modified the name of the container (changing what comes after _--name_ in the run command), then use that name instead of _poke-stats_
 - If you deleted the _--name_ option from the run command, then you need to use the random string of numbers and letters that was printed to the terminal instead of the name when you first ran the container. If you do not remember this string, or did not save it, then just use `docker stop $(docker ps -a -q)`, which will stop all running containers.
@@ -92,7 +92,7 @@ If you want to stop the container from running, you can use the following comman
 
 To start the container again, use the following command:
 
-> `docker start {name}`
+`docker start {name}`
 
 - Here, _{name}_ is the name of the container (_poke-stats_ by default). If you had to stop the container using a different name, use that name to start it again.
   - Alternatively you could open the Docker Desktop application and manually look for and start the container
@@ -101,6 +101,6 @@ To start the container again, use the following command:
 
 If you want to check the app for updates you can follow the following steps:
 
-> 1. Make sure the container is running (i.e. not stopped). You can do this by running `docker ps --filter "status=running" --format "{{.Names}}" --quiet` in a terminal. This command will output the name of all running containers. If you do not see _poke-stats_ (or the name of the container if you changed it), then make sure to [start the container](#how-do-i-stop-this-thing-from-running-and-start-it-again-later) again.
->
-> 2. Run the following command in a terminal, which will run the update script for the app, again replacing _poke-stats_ with the name of the container if you changed it: `docker exec poke-stats npm run update`
+1. Make sure the container is running (i.e. not stopped). You can do this by running `docker ps --filter "status=running" --format "{{.Names}}" --quiet` in a terminal. This command will output the name of all running containers. If you do not see _poke-stats_ (or the name of the container if you changed it), then make sure to [start the container](#how-do-i-stop-this-thing-from-running-and-start-it-again-later) again.
+
+2. Run the following command in a terminal, which will run the update script for the app, again replacing _poke-stats_ with the name of the container if you changed it: `docker exec poke-stats npm run update`
