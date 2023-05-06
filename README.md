@@ -22,8 +22,11 @@ To check for updates you can follow [these instructions](#how-do-i-check-for-upd
 - Check to make sure virtualization is enabled on your machine. You can do that by following the instructions [here](https://support.bluestacks.com/hc/en-us/articles/360058102252-How-to-enable-Virtualization-VT-on-Windows-10-for-BlueStacks-5#:~:text=A.%20To%20check%20if%20Virtualization,then%20Virtualization%20is%20turned%20on.). This is referred to as "BIOS-level hardware virtualization support" in the install instructions on Docker's website.
 - You need either WSL or Hyper-V activated/installed.
   - I could not get Hyper-V working on my machine personally, but you can try the steps [here](https://techcommunity.microsoft.com/t5/itops-talk-blog/step-by-step-enabling-hyper-v-for-use-on-windows-10/ba-p/267945) to see if you can get it to work.
-  - For WSL, if you do not already have it, follow steps 1-6 [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package). For your distribution of choice I would suggest Ubuntu but that is up to you.
+  - For WSL, if you do not already have it, follow steps 1-6 [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual). For your distribution of choice I would suggest Ubuntu but that is up to you.
 - Then follow [these instructions](https://docs.docker.com/desktop/install/windows-install/#install-docker-desktop-on-windows) from Docker's website.
+  - If you need to add your account to the _docker-users_ group, do the following instead of following the directions in the instructions:
+  1. In the search bar, type "Command Prompt" and run it as an administrator.
+  2. Type `net localgroup docker-users {USER} /add` where {USER} is the name of your account.
 
 ### Mac
 
@@ -38,7 +41,7 @@ To check for updates you can follow [these instructions](#how-do-i-check-for-upd
 
 To run the app you need to open a shell/terminal on your machine and run the following command:
 
-`docker run -d -p 8080:2222 -v data:/app/database/db-files --name poke-stats pokemon-stats-page`
+`docker run -d -p 8080:2222 -v data:/app/database/db-files --name poke-stats mdwelker/pokemon-stats-page`
 
 - Then simply open your browser and type `localhost:8080` and the page should be loaded.
 
@@ -57,7 +60,7 @@ If you are curious about what this command is doing, here is an explanation of t
   - The volume created is called "data" and "/app/database/db-files" is the file path in the container where the database files are located.
 - **--name poke-stats** - Specifies the name of the container. This is useful if you want to start/stop the container using the instructions [here](#how-do-i-stop-this-thing-from-running-and-start-it-again-later), as you only need to type the name.
   - This is completely optional, and removing it will not effect the app itself.
-- **pokemon-stats-page** - The name of the Docker Image to use. Think of the Image as the environment the app runs in. It has all the dependencies and files the app needs to function. I created this image and uploaded it to [Docker Hub](https://hub.docker.com/repository/docker/mdwelker/pokemon-stats-page/general), and the command will download the image so that the app can run in the environment I configured for it.
+- **mdwelker/pokemon-stats-page** - The name of the Docker Image to use. Think of the Image as the environment the app runs in. It has all the dependencies and files the app needs to function. I created this image and uploaded it to [Docker Hub](https://hub.docker.com/repository/docker/mdwelker/pokemon-stats-page/general), and the command will download the image so that the app can run in the environment I configured for it.
 - If you do not believe my explanations go read up on it yourself [here](https://docs.docker.com/engine/reference/commandline/run/)
 
 ## **Help**
