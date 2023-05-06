@@ -39,6 +39,7 @@
           str += `${i}`;
           image.src = `/pictures/pokemon/${str}.png`;
           image.className = "image";
+          image.alt = names[i - 1];
           //label
           let label = document.createElement("a");
           label.href = `pokemon.html?name=${names[i - 1]}&num=${str}`;

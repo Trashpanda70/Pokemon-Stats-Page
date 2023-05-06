@@ -26,6 +26,7 @@
         const str = urlParams.get("num");
         image.src = `/pictures/pokemon/${str}.png`;
         image.className = "center image-single";
+        image.alt = name;
         header.append(image);
         return name;
       }
@@ -111,13 +112,88 @@
           },
         });
       }
+      /**
+       * displays the type defenses with a picture of the type for easier reading
+       */
+      async function loadTypes(defenses) {
+        const types = [
+          "normal",
+          "fire",
+          "water",
+          "electric",
+          "grass",
+          "ice",
+          "fighting",
+          "poison",
+          "ground",
+          "flying",
+          "psychic",
+          "bug",
+          "rock",
+          "ghost",
+          "dragon",
+          "dark",
+          "steel",
+          "fairy",
+        ];
+        let main = document.getElementById("typesDiv");
+        for (t of types) {
+          //switch halfway through
+          if (t == "flying") {
+            main = document.getElementById("typesDiv2");
+          }
+          //div for type
+          let div = document.createElement("div");
+          div.style.position = "relative";
+          //image
+          let img = document.createElement("img");
+          img.className = "types";
+          img.src = `/pictures/types/${t}.png`;
+          //button used as label
+          let btn = document.createElement("button");
+          btn.textContent = defenses[t];
+          btn.disabled = true;
+          btn.className = "types button";
+          btn.style.marginTop = "40px";
+          switch (defenses[t]) {
+            case 0:
+              btn.style.backgroundColor = "#2E2A2A";
+              break;
+            case 0.25:
+              btn.style.backgroundColor = "#4A0707";
+              break;
+            case 0.5:
+              btn.style.backgroundColor = "#AD0C0C";
+              break;
+            case 1:
+              btn.style.backgroundColor = "#DDDDDD";
+              btn.style.color = "black";
+              break;
+            case 2:
+              btn.style.backgroundColor = "#1C5C0E";
+              break;
+            case 4:
+              btn.style.backgroundColor = "#33C213";
+              break;
+            default:
+              alert(
+                `HEY! Type ${t} did not have a valid defense value! Please report this. :(`
+              );
+          }
+          //append
+          div.appendChild(img);
+          div.appendChild(btn);
+          main.appendChild(div);
+        }
+      }
 
       (async () => {
-        var container = document.getElementById("start");
         const name = loadPage();
         //index 0 = data | index 1 = defenses
         let arr = await loadPokemon(name);
-        console.log(arr[0]);
+        console.log(arr);
+        //load types while chart being made
+        loadTypes(arr[1]);
         //make chart and display stat total
         let stats = makeNumArray(arr[0].p_base_stats, true);
         makeChart(stats);
@@ -127,12 +203,25 @@
         document.getElementById("total").textContent = `TOTAL: ${total}`;
       })();
     </script>
-    <!--chart-->
+    <!--Chart-->
     <div style="height: 300px">
       <canvas id="statsChart"></canvas>
     </div>
     <h4 id="total"></h4>
-    <!-- Everything gets appended here-->
-    <div id="start"></div>
+    <hr />
+    <!--Type defenses-->
+    <header>
+      <h2>Type Defenses</h2>
+    </header>
+    <div class="types-container-container" style="left: 50%">
+      <div id="typesDiv" class="types-container"></div>
+      <div
+        id="typesDiv2"
+        class="types-container"
+        style="margin-top: 80px"
+      ></div>
+    </div>
+    <hr />
+    <!--Moves-->
   </body>
 </html>

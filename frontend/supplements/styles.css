@@ -37,3 +37,31 @@ header {
   margin-left: auto;
   margin-right: auto;
 }
+
+.types {
+  width: 120px;
+  height: 40px;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.types-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 120px;
+  flex-direction: row;
+  text-align: center;
+}
+
+.types-container-container {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: inline-block;
+}
+
+.button {
+  font-size: 16px;
+  color: rgb(236, 244, 8);
+}
