@@ -104,6 +104,7 @@ public class FileToYaml {
                 if (accuracy == 0)
                     accuracy = 999;
                 moves.add(new Move(name, type, category, power, accuracy, pp, description));
+                lineScan.close();
             }
             yamlWriter.println("---\nNames:");
             names.forEach((name) -> yamlWriter.println("  - " + name));
