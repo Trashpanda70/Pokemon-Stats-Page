@@ -18,7 +18,7 @@ describe('testing moves API', () => {
     cmd += 'm_power INTEGER DEFAULT 0,m_accuracy INTEGER DEFAULT 100,m_pp INTEGER NOT NULL,m_description TEXT NOT NULL);';
     await db.runCommand(cmd, `test-files/test.db`);
     await InputData.readMoves(`test-files/test.db`, `test-files/movesTest.yml`);
-    await new Promise(resolve => setTimeout(resolve, 500)); //idk bro 
+    await new Promise(resolve => setTimeout(resolve, 1000)); //idk bro 
   });
 
   test("all moves", async () => {
