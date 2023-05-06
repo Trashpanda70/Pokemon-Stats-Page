@@ -4,9 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "eslint . && jest --runInBand",
-    "start": "pm2 start index.js --watch --no-daemon --name pokemon-stats-page",
-    "stop": "pm2 stop pokemon-stats-page",
-    "update": "node readData.js"
+    "start": "node readData.js && pm2 start index.js --watch --no-daemon --name pokemon-stats-page",
+    "stop": "pm2 stop pokemon-stats-page"
   },
   "keywords": [],
   "author": "Trashpanda70",
