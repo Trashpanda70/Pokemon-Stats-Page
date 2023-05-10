@@ -56,7 +56,7 @@ If you are curious about what this command is doing, here is an explanation of t
   - What this is actually doing is saying _"link port 8080 on my machine to port 2222 in the container"_. The code uses port 2222, so this cannot be changed. But what you can change is the first port number. If you change this number to something else, like _6969_, then you would access the app by typing `localhost:6969` in your browser rather than `localhost:8080`.
   - If you want to be able to just type `localhost` in the browser and access the app, then use port _80_.
 - **-v data:/app/database/db-files** - Option that specified to create/use a Docker Volume for data storage. This means that you can stop the app and start it again, and all data is saved.
-  - The only data that really needs to be saved is the database files that have the information for Pokemon and Moves, but more could be added if I upgrade the app.
+  - The only data that really needs to be saved is the database files that store information, but more could be added if I upgrade the app.
   - The volume created is called "data" and "/app/database/db-files" is the file path in the container where the database files are located.
 - **--name poke-stats** - Specifies the name of the container. This is useful if you want to start/stop the container using the instructions [here](#how-do-i-stop-this-thing-from-running-and-start-it-again-later), as you only need to type the name.
   - This is completely optional, and removing it will not effect the app itself.
