@@ -22,6 +22,7 @@ exports.pokeColumns = ['p_name',
   'p_egg_moves',
   'p_egg_groups'];
 
+exports.abilityColumns = ['a_name, a_description'];
 /* ----------------------------- OPEN/CLOSE OPERATIONS ----------------------------- */
 /** open database connection*/
 function connect(path) {
