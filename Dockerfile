@@ -10,6 +10,7 @@ WORKDIR /app
 RUN mkdir database/db-files io/output-files
 RUN sqlite3 database/db-files/moves.db <init/moves.sql
 RUN sqlite3 database/db-files/pokemon.db <init/pokemon.sql
+RUN sqlite3 database/db-files/abilities.db <init/abilities.sql
 RUN npm install
 RUN FIRSTRUN=yes npm run update
 CMD npm run start

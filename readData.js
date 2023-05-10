@@ -1,5 +1,5 @@
 const { execSync } = require("child_process");
-const { readMoves, readPokemon } = require('./io/readYAML');
+const { readMoves, readPokemon, readAbilities } = require('./io/readYAML');
 // read data in
 (async () => {
   let str = execSync("git pull"); //pull possible changes
@@ -8,5 +8,6 @@ const { readMoves, readPokemon } = require('./io/readYAML');
     execSync("cd io && java -cp bin FileToYaml");
     await readMoves();
     await readPokemon();
+    await readAbilities();
   }
 })();

@@ -83,15 +83,17 @@ exports.readPokemon = async (dbPath = dbPathPokemon, readPath = `${yamlPath}/pok
 
 exports.readAbilities = async (dbPath = dbPathAbilities, readPath = `${yamlPath}/abilities.yml`) => {
   const buildYamlContent = await fs.promises.readFile(readPath, 'utf8');
-  const abilities = yaml.parse(buildYamlContent);
-  console.log(abilities);
-  // for (let ab of abilities) {
-
-  // }
+  const file = yaml.parse(buildYamlContent);
+  let abilities = [];
+  for (let ab of file) {
+    ab.a_name = ab.a_name.replaceAll("'", "''");
+    ab.a_description = ab.a_description.replaceAll("'", "''");
+    abilities.push([`'${ab.a_name}'`, `'${ab.a_description}'`]);
+  }
   await db.deleteData('abilities', dbPath).catch(err => {
     console.log(err);
   });
-  await db.insertDataManyRows('abilities', db.pokeColumns, abilities, dbPath).catch(err => {
+  await db.insertDataManyRows('abilities', db.abilityColumns, abilities, dbPath).catch(err => {
     console.log(err);
   });
 };
