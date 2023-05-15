@@ -10,3 +10,4 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 require('./endpoints/webpage')(app);
 require('./endpoints/moves')(app);
 require('./endpoints/pokemon')(app);
+require('./endpoints/abilities')(app);

@@ -19,7 +19,7 @@ describe('testing pokemon API', () => {
     cmd += "p_moves TEXT,p_tutor_moves TEXT,p_egg_moves TEXT,p_egg_groups TEXT DEFAULT 'Undiscovered')";
     await db.runCommand(cmd, `test-files/test.db`);
     await InputData.readPokemon(`test-files/test.db`, `test-files/pokemonTest.yml`);
-    await new Promise(resolve => setTimeout(resolve, 1000)); //idk bro 
+    await new Promise(resolve => setTimeout(resolve, 1500)); //idk bro 
   });
 
   test("all pokemon", async () => {

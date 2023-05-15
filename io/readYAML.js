@@ -5,6 +5,7 @@ const db = require('../database/db');
 const yamlPath = './io/output-files';
 const dbPathMoves = './database/db-files/moves.db';
 const dbPathPokemon = './database/db-files/pokemon.db';
+const dbPathAbilities = './database/db-files/abilities.db';
 
 /**
  * Reads the moves.yml file and stores the results in the database
@@ -76,6 +77,23 @@ exports.readPokemon = async (dbPath = dbPathPokemon, readPath = `${yamlPath}/pok
     console.log(err);
   });
   await db.insertDataManyRows('pokemon', db.pokeColumns, pokemon, dbPath).catch(err => {
+    console.log(err);
+  });
+};
+
+exports.readAbilities = async (dbPath = dbPathAbilities, readPath = `${yamlPath}/abilities.yml`) => {
+  const buildYamlContent = await fs.promises.readFile(readPath, 'utf8');
+  const file = yaml.parse(buildYamlContent);
+  let abilities = [];
+  for (let ab of file) {
+    ab.a_name = ab.a_name.replaceAll("'", "''");
+    ab.a_description = ab.a_description.replaceAll("'", "''");
+    abilities.push([`'${ab.a_name}'`, `'${ab.a_description}'`]);
+  }
+  await db.deleteData('abilities', dbPath).catch(err => {
+    console.log(err);
+  });
+  await db.insertDataManyRows('abilities', db.abilityColumns, abilities, dbPath).catch(err => {
     console.log(err);
   });
 };

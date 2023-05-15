@@ -118,8 +118,36 @@ public class FileToYaml {
         }
     }
 
+    public static void outputAbilities(String infile, String outfile) {
+        try (Scanner fileScan = new Scanner(new FileInputStream(infile))) {
+            Files.deleteIfExists(Path.of(outfile));
+            PrintWriter fileOut = new PrintWriter(new FileOutputStream(outfile));
+            while (fileScan.hasNextLine()) {
+                String ability = fileScan.nextLine();
+                if (ability.charAt(0) == '#' || ability.charAt(1) == '#') {
+                    continue;
+                }
+                Scanner lineScan = new Scanner(ability);
+                lineScan.useDelimiter(",");
+                lineScan.next();
+                String a_name = lineScan.next().toLowerCase();
+                lineScan.next();
+                String a_desc = lineScan.nextLine().substring(1);
+                fileOut.println("- a_name: " + a_name);
+                fileOut.println("  a_description: " + a_desc);
+                lineScan.close();
+            }
+            fileOut.close();
+        } catch (IOException e) {
+            System.out.println("IOException occurred.");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
     public static void main(String[] args) {
         outputPokemon("./input-files/pokemon.txt", "./output-files/pokemon.yml");
         outputMoves("./input-files/moves.txt", "./output-files/moves.yml");
+        outputAbilities("./input-files/abilities.txt", "./output-files/abilities.yml");
     }
 }
