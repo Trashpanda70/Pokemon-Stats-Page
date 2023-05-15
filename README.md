@@ -15,6 +15,8 @@ Support might soon come for having executable file since NodeJS v20 supports [ma
 
 To check for updates you can follow [these instructions](#how-do-i-check-for-updates)
 
+Before you ask, there are no spaces in move and ability names due to how they are stored in the game files.
+
 ## **Installing Docker**
 
 ### Windows

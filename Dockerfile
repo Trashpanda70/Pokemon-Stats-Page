@@ -12,7 +12,7 @@ RUN sqlite3 database/db-files/moves.db <init/moves.sql
 RUN sqlite3 database/db-files/pokemon.db <init/pokemon.sql
 RUN sqlite3 database/db-files/abilities.db <init/abilities.sql
 RUN npm install
-RUN FIRSTRUN=yes npm run update
+RUN OVERRIDE=yes npm run update
 CMD npm run start
 # docker build -t pokemon-stats-page .
 # docker run -d -p 8080:2222 -v data:/app/database/db-files --name poke-stats pokemon-stats-page

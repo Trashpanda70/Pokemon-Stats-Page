@@ -71,7 +71,7 @@ header {
   color: rgb(236, 244, 8);
 }
 
-.types-table {
+.img-table {
   width: 60px;
   height: 20px;
 }
@@ -80,4 +80,30 @@ header {
   position: fixed;
   top: 10px;
   right: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 10px;
+}
+td,
+th {
+  border: 1px solid black;
+  padding: 10px;
+}
+th {
+  border-bottom: 1px solid black;
+}
+
+th.last-column,
+td.last-column {
+  width: 100%;
+}
+
+.even {
+  background-color: #d2d2d2;
+}
+
+.odd {
+  background-color: #ffffff;
 }

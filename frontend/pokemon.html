@@ -50,6 +50,8 @@
           img.alt = t;
           typesDiv.appendChild(img);
         }
+        //abilities
+
         //append types and header
         header.append(typesDiv);
         header.append(image);
@@ -248,9 +250,17 @@
             }
             if (col == "m_type") {
               let img = document.createElement("img");
-              img.className = "types-table";
+              img.className = "img-table";
               img.src = `/pictures/types/${data["m_type"]}.png`;
               img.alt = t;
+              cell.appendChild(img);
+            } else if (col == "m_category") {
+              let img = document.createElement("img");
+              img.className = "img-table";
+              img.src = `/pictures/category/${data[
+                "m_category"
+              ].toLowerCase()}.png`;
+              img.alt = data["m_category"];
               cell.appendChild(img);
             } else {
               let text = col == "level" ? levels[i] : data[col];
@@ -286,12 +296,14 @@
             if (data["m_category"] == "Status") {
               data["m_accuracy"] = "---";
             } else {
-              data["m_accuracy"] = "\u221E";
+              data["m_accuracy"] = "\u221E"; //infinity symbol
             }
           }
           //0 power goes to blank
           if (data["m_power"] == 0) {
             data["m_power"] = "---";
+          } else if (data["m_power"] == 1) {
+            data["m_power"] = "???";
           }
           //create cells for move data
           for (col of cols) {
@@ -301,9 +313,17 @@
             }
             if (col == "m_type") {
               let img = document.createElement("img");
-              img.className = "types-table";
+              img.className = "img-table";
               img.src = `/pictures/types/${data["m_type"]}.png`;
               img.alt = t;
+              cell.appendChild(img);
+            } else if (col == "m_category") {
+              let img = document.createElement("img");
+              img.className = "img-table";
+              img.src = `/pictures/category/${data[
+                "m_category"
+              ].toLowerCase()}.png`;
+              img.alt = data["m_category"];
               cell.appendChild(img);
             } else {
               let text = data[col];
@@ -313,6 +333,52 @@
             row.appendChild(cell);
           }
           tutorBody.append(row);
+        }
+      }
+
+      /**
+       * Loads the abilities table with all abilities of the pokemon
+       */
+      async function loadAbilities(abils, hiddenAbil) {
+        const abilsBody = document.querySelector("#abilitiesTbl tbody");
+        //normal abilities
+        for (a of abils) {
+          //create elements
+          const row = document.createElement("tr");
+          const nameCell = document.createElement("td");
+          const nameCellText = document.createTextNode(a);
+          const descCell = document.createElement("td");
+          descCell.className = "last-column";
+          //get description data
+          let ret = await fetch(`/abilities/${a}`);
+          ret = await ret.json();
+          const descCellText = document.createTextNode(ret.data.a_description);
+          //append
+          nameCell.appendChild(nameCellText);
+          descCell.appendChild(descCellText);
+          row.appendChild(nameCell);
+          row.appendChild(descCell);
+          abilsBody.appendChild(row);
+        }
+        //hidden ability if applicable
+        if (hiddenAbil && hiddenAbil != "null") {
+          //create elements
+          const row = document.createElement("tr");
+          row.className = "even";
+          const nameCell = document.createElement("td");
+          const nameCellText = document.createTextNode(hiddenAbil);
+          const descCell = document.createElement("td");
+          descCell.className = "last-column";
+          //get description data
+          let ret = await fetch(`/abilities/${hiddenAbil}`);
+          ret = await ret.json();
+          const descCellText = document.createTextNode(ret.data.a_description);
+          //append
+          nameCell.appendChild(nameCellText);
+          descCell.appendChild(descCellText);
+          row.appendChild(nameCell);
+          row.appendChild(descCell);
+          abilsBody.appendChild(row);
         }
       }
 
@@ -335,6 +401,7 @@
           arr[0].p_moves.split(","),
           arr[0].p_tutor_moves.split(",")
         );
+        loadAbilities(arr[0].p_abilities.split(","), arr[0].p_hidden_abilities); //only 1 hidden ability supported
       })();
     </script>
     <!--top info-->
@@ -359,38 +426,26 @@
         style="margin-top: 80px; margin-bottom: 85px"
       ></div>
     </div>
+    <header>
+      <h2>Abilities</h2>
+      <h4>Shaded row is hidden ability (if applicable)</h4>
+      <table id="abilitiesTbl" style="width: 100%">
+        <colgroup>
+          <col span="1" style="width: 30%" />
+          <col span="1" style="width: 70%" />
+        </colgroup>
+        <thead>
+          <th>Name</th>
+          <th class="last-column">Description</th>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </header>
     <hr />
     <!--Moves by Level Up-->
     <header>
       <h2>Moves Learned By Level Up</h2>
     </header>
-    <style>
-      table {
-        border-collapse: collapse;
-        border-spacing: 10px;
-      }
-      td,
-      th {
-        border: 1px solid black;
-        padding: 10px;
-      }
-      th {
-        border-bottom: 1px solid black;
-      }
-
-      th.last-column,
-      td.last-column {
-        width: 100%;
-      }
-
-      .even {
-        background-color: #d2d2d2;
-      }
-
-      .odd {
-        background-color: #ffffff;
-      }
-    </style>
     <table id="movesLevel">
       <thead>
         <th>Level</th>

@@ -130,8 +130,8 @@ public class FileToYaml {
                 Scanner lineScan = new Scanner(ability);
                 lineScan.useDelimiter(",");
                 lineScan.next();
+                String a_name = lineScan.next().toLowerCase();
                 lineScan.next();
-                String a_name = lineScan.next();
                 String a_desc = lineScan.nextLine().substring(1);
                 fileOut.println("- a_name: " + a_name);
                 fileOut.println("  a_description: " + a_desc);
