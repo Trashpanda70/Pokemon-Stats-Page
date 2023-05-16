@@ -43,8 +43,13 @@ public class FileToYaml {
                     }
                 }
                 //get moves strings for levels and names separated
-                assert movesString != null;
-                String[] movesArr = movesString.split(",");
+                String[] movesArr = null;
+                try {
+                    movesArr = movesString.split(",");
+                } catch (NullPointerException npe) {
+                    System.out.println("Reading in " + name + " failed. Please report ");
+                    System.exit(1);
+                }
                 StringBuilder moveLevels = new StringBuilder();
                 StringBuilder moveNames = new StringBuilder();
                 for (int i = 0; i < movesArr.length; i++) {
