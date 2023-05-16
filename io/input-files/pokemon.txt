@@ -2163,7 +2163,7 @@ BattlerEnemyX = 1
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 3
-Evolutions = ALAKAZAM,Item,TWISTEDSPOON
+Evolutions = ALAKAZAM,HoldItem,TWISTEDSPOON
 #-------------------------------
 [65]
 Name = Alakazam

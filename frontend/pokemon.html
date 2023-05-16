@@ -8,6 +8,12 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      const mapNames = {
+        5: "Heavenly Pillar Floor 1",
+        6: "Heavenly Pillar Floor 2",
+        124: "Alrosa Mine (Above Water)",
+      };
+
       /**
        * load pokemon data and type weaknesses
        */
@@ -389,6 +395,33 @@
           let evArr = evolutions.split(",");
           //create row elements
           for (let i = 0; i < evArr.length; i += 3) {
+            //fix data
+            if (evArr[i + 1].includes("Level")) {
+              //change wording of level
+              evArr[i + 1] = evArr[i + 1].replace("Level", "Level up ");
+            } else if (evArr[i + 1] == "Location") {
+              //locations from map id to name
+              evArr[i + 2] = mapNames[evArr[i + 2]];
+            } else if (evArr[i + 1] == "AttackGreater") {
+              //stat comparison at certain level
+              evArr[i + 1] = "Attack greater than defense at level";
+            } else if (evArr[i + 1] == "DefenseGreater") {
+              evArr[i + 1] = "Defense greater than attack at level";
+            } else if (evArr[i + 1] == "AtkDefEqual") {
+              evArr[i + 1] = "Attack equals defense at level";
+            } else if (evArr[i + 1].includes("Item")) {
+              //change wording of item evolution methods
+              evArr[i + 1] = evArr[i + 1].replace("Item", "Use Item ");
+            } else if (
+              evArr[i + 1].includes("Happiness") &&
+              !evArr[i + 1].includes("MaxHappiness")
+            ) {
+              //change wording of high happiness
+              evArr[i + 1] = evArr[i + 1].replace(
+                "Happiness",
+                "High Happiness "
+              );
+            }
             const row = document.createElement("tr");
             const pokeCell = document.createElement("td");
             const pokeCellText = document.createTextNode(evArr[i]);
