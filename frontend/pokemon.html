@@ -391,9 +391,19 @@
        */
       async function loadEvolutions(evolutions) {
         if (evolutions && evolutions != "null") {
+          //get names array for links and nameMod for finding index
+          const ret = await fetch("/pokemon-names");
+          const retJson = await ret.json();
+          const names = retJson.data;
+          let namesUpper = names.map((name) => {
+            let nameMod = name.toUpperCase();
+            nameMod = nameMod.replace(".");
+            nameMod = nameMod.replace(" ");
+            nameMod = nameMod.replace("-");
+            return nameMod;
+          });
           const body = document.querySelector("#evolutionsTbl tbody");
           let evArr = evolutions.split(",");
-          //create row elements
           for (let i = 0; i < evArr.length; i += 3) {
             //fix data
             if (evArr[i + 1].includes("Level")) {
@@ -422,16 +432,23 @@
                 "High Happiness "
               );
             }
+            //create row elements
             const row = document.createElement("tr");
             const pokeCell = document.createElement("td");
-            const pokeCellText = document.createTextNode(evArr[i]);
+            const pokeLink = document.createElement("a");
+            pokeLink.textContent = evArr[i];
+            //generate link to webpage for pokemon listed
+            let idx = namesUpper.indexOf(evArr[i]);
+            let str = idx < 10 ? "00" : idx < 100 ? "0" : "";
+            str += `${idx + 1}`;
+            pokeLink.href = `pokemon.html?name=${names[idx]}&num=${str}`;
             const methodCell = document.createElement("td");
             const methodCellText = document.createTextNode(evArr[i + 1]);
             const paramCell = document.createElement("td");
             const paramCellText = document.createTextNode(evArr[i + 2]);
             paramCell.className = "last-column";
             //append
-            pokeCell.appendChild(pokeCellText);
+            pokeCell.appendChild(pokeLink);
             methodCell.appendChild(methodCellText);
             paramCell.appendChild(paramCellText);
             row.appendChild(pokeCell);
@@ -510,7 +527,7 @@
       <h2>Evolutions</h2>
       <h4>
         The parameter is to give information such as the exact level, item, or
-        map needed for evolution
+        place needed for evolution
       </h4>
       <table id="evolutionsTbl" style="width: 100%">
         <colgroup>
@@ -564,7 +581,7 @@
       <tbody></tbody>
     </table>
     <br /><br /><br />
-    <a href="index.html"><button>Home</button></a>
+    <a href="index.html" class="bottom-right-btn"><button>Home</button></a>
     <hr />
   </body>
 </html>
