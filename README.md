@@ -15,7 +15,8 @@ Support might soon come for having executable file since NodeJS v20 supports [ma
 
 To check for updates you can follow [these instructions](#how-do-i-check-for-updates)
 
-Also note that there are no spaces in move and ability names due to how they are stored in the game files.
+- Note that there are no spaces in move and ability names due to how they are stored in the game files.
+- When looking at the level that Pokemon learn moves at, a level of 0 means the Pokemon learns that move when it evolves into that species (moves learned on evolution)
 
 ## **Installing Docker**
 
