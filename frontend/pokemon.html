@@ -380,6 +380,35 @@
         }
       }
 
+      /**
+       * Loads the evolutions of the pokemon
+       */
+      async function loadEvolutions(evolutions) {
+        if (evolutions && evolutions != "null") {
+          const body = document.querySelector("#evolutionsTbl tbody");
+          let evArr = evolutions.split(",");
+          //create row elements
+          for (let i = 0; i < evArr.length; i += 3) {
+            const row = document.createElement("tr");
+            const pokeCell = document.createElement("td");
+            const pokeCellText = document.createTextNode(evArr[i]);
+            const methodCell = document.createElement("td");
+            const methodCellText = document.createTextNode(evArr[i + 1]);
+            const paramCell = document.createElement("td");
+            const paramCellText = document.createTextNode(evArr[i + 2]);
+            paramCell.className = "last-column";
+            //append
+            pokeCell.appendChild(pokeCellText);
+            methodCell.appendChild(methodCellText);
+            paramCell.appendChild(paramCellText);
+            row.appendChild(pokeCell);
+            row.appendChild(methodCell);
+            row.appendChild(paramCell);
+            body.appendChild(row);
+          }
+        }
+      }
+
       (async () => {
         //index 0 = data | index 1 = defenses
         let arr = await loadPokemon();
@@ -400,6 +429,7 @@
           arr[0].p_tutor_moves.split(",")
         );
         loadAbilities(arr[0].p_abilities.split(","), arr[0].p_hidden_abilities); //only 1 hidden ability supported
+        loadEvolutions(arr[0].p_evolutions);
       })();
     </script>
     <!--top info-->
@@ -424,6 +454,7 @@
         style="margin-top: 80px; margin-bottom: 85px"
       ></div>
     </div>
+    <!--Abilities-->
     <header>
       <h2>Abilities</h2>
       <h4>Shaded row is hidden ability (if applicable)</h4>
@@ -439,6 +470,30 @@
         <tbody></tbody>
       </table>
     </header>
+    <br />
+    <hr />
+    <!--Evolutions-->
+    <header>
+      <h2>Evolutions</h2>
+      <h4>
+        The parameter is to give information such as the exact level, item, or
+        map needed for evolution
+      </h4>
+      <table id="evolutionsTbl" style="width: 100%">
+        <colgroup>
+          <col span="1" style="width: 30%" />
+          <col span="1" style="width: 30%" />
+          <col span="1" style="width: 40%" />
+        </colgroup>
+        <thead>
+          <th>Pokemon</th>
+          <th>Method</th>
+          <th class="last-column">Parameter</th>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </header>
+    <br />
     <hr />
     <!--Moves by Level Up-->
     <header>

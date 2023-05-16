@@ -1,5 +1,5 @@
 public record Pokemon(String name, String types, String baseStats, String evs, String abilities, String hiddenAbilities,
-                      String moveLevels, String moves, String tutorMoves, String eggMoves, String eggGroups) {
+                      String moveLevels, String moves, String tutorMoves, String eggMoves, String eggGroups, String evolutions) {
     @Override
     public String toString() {
         String space = "    ";
@@ -13,6 +13,7 @@ public record Pokemon(String name, String types, String baseStats, String evs, S
                 space + "p_moves: " + moves + "\n" +
                 space + "p_tutor_moves: " + tutorMoves + "\n" +
                 space + "p_egg_moves: " + eggMoves + "\n" +
-                space + "p_egg_groups: " + eggGroups;
+                space + "p_egg_groups: " + eggGroups + "\n" +
+                space + "p_evolutions: " + evolutions;
     }
 }

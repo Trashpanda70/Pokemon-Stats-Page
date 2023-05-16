@@ -59,6 +59,9 @@ exports.readPokemon = async (dbPath = dbPathPokemon, readPath = `${yamlPath}/pok
       poke.p_tutor_moves = poke.p_tutor_moves.replaceAll("'", "''");
     if (poke.p_egg_moves)
       poke.p_egg_moves = poke.p_egg_moves.replaceAll("'", "''");
+    //some pokemon have no evolutions
+    if (poke.p_evolutions)
+      poke.p_evolutions = poke.p_evolutions.replaceAll("'", "''");
     //then fill data of array just pushed, creating a 2D array
     pokemon[pokemon.length - 1][0] = `'${poke.p_name}'`;
     pokemon[pokemon.length - 1][1] = `'${poke.p_types}'`;
@@ -71,6 +74,7 @@ exports.readPokemon = async (dbPath = dbPathPokemon, readPath = `${yamlPath}/pok
     pokemon[pokemon.length - 1][8] = `'${poke.p_tutor_moves}'`;
     pokemon[pokemon.length - 1][9] = `'${poke.p_egg_moves}'`;
     pokemon[pokemon.length - 1][10] = `'${poke.p_egg_groups}'`;
+    pokemon[pokemon.length - 1][11] = `'${poke.p_evolutions}'`;
   }
   //scuffed? yeah. Guaranteed to work? also yeah
   await db.deleteData('pokemon', dbPath).catch(err => {

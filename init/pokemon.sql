@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS pokemon (
   p_moves TEXT,
   p_tutor_moves TEXT,
   p_egg_moves TEXT,
-  p_egg_groups TEXT DEFAULT 'Undiscovered'
-)
+  p_egg_groups TEXT DEFAULT 'Undiscovered',
+  p_evolutions TEXT DEFAULT 'none'
+);

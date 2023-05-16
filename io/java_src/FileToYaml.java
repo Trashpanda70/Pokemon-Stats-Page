@@ -24,7 +24,7 @@ public class FileToYaml {
             while (fileScan.hasNext()) {
                 Scanner sc = new Scanner(fileScan.next());
                 String name = null, type1 = null, type2 = "", stats = null, evs = null, abils = null, hiddenAbils = null;
-                String movesString = null, tutorMoves = null, eggMoves = null, eggGroups = null;
+                String movesString = null, tutorMoves = null, eggMoves = null, eggGroups = null, evolutions = null;
                 while (sc.hasNextLine()) {
                     String[] line = sc.nextLine().split(" = ");
                     switch (line[0]) {
@@ -39,6 +39,7 @@ public class FileToYaml {
                         case "TutorMoves" -> tutorMoves = line[1].toLowerCase();
                         case "EggMoves" -> eggMoves = line[1].toLowerCase();
                         case "Compatibility" -> eggGroups = line[1];
+                        case "Evolutions" -> evolutions = line[1];
                     }
                 }
                 //get moves strings for levels and names separated
@@ -58,7 +59,7 @@ public class FileToYaml {
                 String types = "".equals(type2) ? type1 : type1 + "," + type2;
                 names.add(name);
                 pokemon.add(new Pokemon(name, types, stats, evs, abils, hiddenAbils, moveLevels.toString(),
-                        moveNames.toString(), tutorMoves, eggMoves, eggGroups));
+                        moveNames.toString(), tutorMoves, eggMoves, eggGroups, evolutions));
             }
             yamlWriter.println("---\nNames:");
             names.forEach((name) -> yamlWriter.println("  - " + name));

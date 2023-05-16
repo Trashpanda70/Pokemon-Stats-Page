@@ -20,7 +20,8 @@ exports.pokeColumns = ['p_name',
   'p_moves',
   'p_tutor_moves',
   'p_egg_moves',
-  'p_egg_groups'];
+  'p_egg_groups',
+  'p_evolutions'];
 
 exports.abilityColumns = ['a_name', 'a_description'];
 /* ----------------------------- OPEN/CLOSE OPERATIONS ----------------------------- */
