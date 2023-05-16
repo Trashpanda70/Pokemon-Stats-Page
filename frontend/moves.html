@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Silly Little Pokemon Tool</title>
+    <link rel="stylesheet" href="/supplements/styles.css" />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <header>
+      <h1>Pokemon Stats Page for my (unnamed) Pokemon game!</h1>
+      <h3>
+        Look at information for all moves here. There are a few changes from the
+        base games.
+      </h3>
+      <hr />
+      <h2>Filters</h2>
+      <label for="types">Type:</label>
+      <select name="types" id="types" style="margin-right: 20px">
+        <option value="all" selected>All</option>
+        <option value="normal">Normal</option>
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="electric">Electric</option>
+        <option value="grass">Grass</option>
+        <option value="ice">Ice</option>
+        <option value="fighting">Fighting</option>
+        <option value="poison">Poison</option>
+        <option value="ground">Ground</option>
+        <option value="flying">Flying</option>
+        <option value="psychic">Psychic</option>
+        <option value="bug">Bug</option>
+        <option value="rock">Rock</option>
+        <option value="ghost">Ghost</option>
+        <option value="dragon">Dragon</option>
+        <option value="dark">Dark</option>
+        <option value="steel">Steel</option>
+        <option value="fairy">Fairy</option>
+      </select>
+      <label for="categories">Category:</label>
+      <select name="categories" id="categories">
+        <option value="all" selected>All</option>
+        <option value="Physical">Physical</option>
+        <option value="Special">Special</option>
+        <option value="Status">Status</option>
+      </select>
+    </header>
+    <button class="top-right-btn" onclick="loadPokemonPage()">
+      View All Pokemon
+    </button>
+    <br />
+    <!--Moves table-->
+    <table id="movesTbl">
+      <thead>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Power</th>
+        <th>Accuracy</th>
+        <th>Category</th>
+        <th>PP</th>
+        <th class="last-column">Description</th>
+      </thead>
+      <tbody id="movesBody"></tbody>
+    </table>
+    <script>
+      async function loadMoves(type = "all", category = "all") {
+        let queryString = "";
+        if (type != "all" && category != "all") {
+          //both
+          queryString = `?type=${type}&category=${category}`;
+        } else if (category != "all") {
+          //only category
+          queryString = `?category=${category}`;
+        } else if (type != "all") {
+          //only type
+          queryString = `?type=${type}`;
+        }
+        let ret = await fetch(`/moves${queryString}`);
+        moves = await ret.json();
+        movesData = moves.data;
+        const body = document.querySelector("#movesTbl tbody");
+        cols = [
+          "m_name",
+          "m_type",
+          "m_power",
+          "m_accuracy",
+          "m_category",
+          "m_pp",
+          "m_description",
+        ];
+        for (let i = 0; i < movesData.length; i++) {
+          //get move data
+          let data = movesData[i];
+          const row = document.createElement("tr");
+          row.className = i % 2 == 0 ? "even" : "odd";
+          //fix move data
+          //infinite accuracy or status move without accuracy?
+          if (data["m_accuracy"] == 999) {
+            if (data["m_category"] == "Status") {
+              data["m_accuracy"] = "---";
+            } else {
+              data["m_accuracy"] = "\u221E"; //infinity symbol
+            }
+          }
+          //0 power goes to blank
+          if (data["m_power"] == 0) {
+            data["m_power"] = "---";
+          } else if (data["m_power"] == 1) {
+            data["m_power"] = "???";
+          }
+          //create cells for move data
+          for (col of cols) {
+            const cell = document.createElement("td");
+            if (col == "m_description") {
+              cell.className = "last-column";
+            }
+            if (col == "m_type") {
+              let img = document.createElement("img");
+              img.className = "img-table";
+              img.src = `/pictures/types/${data["m_type"]}.png`;
+              img.alt = data["m_type"];
+              cell.appendChild(img);
+            } else if (col == "m_category") {
+              let img = document.createElement("img");
+              img.className = "img-table";
+              img.src = `/pictures/category/${data[
+                "m_category"
+              ].toLowerCase()}.png`;
+              img.alt = data["m_category"];
+              cell.appendChild(img);
+            } else {
+              let text = data[col];
+              const cellText = document.createTextNode(text);
+              cell.appendChild(cellText);
+            }
+            row.appendChild(cell);
+          }
+          body.appendChild(row);
+        }
+      }
+
+      function loadPokemonPage() {
+        window.location.href = "index.html";
+      }
+
+      function removeTableRows() {
+        const tbody = document.getElementById("movesBody");
+        while (tbody.firstChild) {
+          if (tbody.firstChild.tagName === "TR") {
+            tbody.firstChild.remove();
+          } else {
+            tbody.removeChild(tbody.firstChild);
+          }
+        }
+      }
+
+      loadMoves();
+      const typesDropDown = document.getElementById("types");
+      const categoryDropDown = document.getElementById("categories");
+      typesDropDown.onchange = function () {
+        removeTableRows();
+        loadMoves(typesDropDown.value, categoryDropDown.value);
+      };
+
+      categoryDropDown.onchange = function () {
+        removeTableRows();
+        loadMoves(typesDropDown.value, categoryDropDown.value);
+      };
+    </script>
+  </body>
+</html>

@@ -14,6 +14,9 @@
       </h3>
       <div><label>Search:</label> <input type="text" id="searchbar" /></div>
     </header>
+    <button class="top-right-btn" onclick="loadMovesPage()">
+      View All Moves
+    </button>
     <!-- Everything gets appended here-->
     <div class="container"></div>
     <script>
@@ -21,6 +24,10 @@
         let ret = await fetch("/pokemon-names");
         names = await ret.json();
         return names.data;
+      }
+
+      function loadMovesPage() {
+        window.location.href = "moves.html";
       }
 
       (async () => {
