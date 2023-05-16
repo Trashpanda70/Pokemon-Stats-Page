@@ -397,9 +397,9 @@
           const names = retJson.data;
           let namesUpper = names.map((name) => {
             let nameMod = name.toUpperCase();
-            nameMod = nameMod.replace(".");
-            nameMod = nameMod.replace(" ");
-            nameMod = nameMod.replace("-");
+            nameMod = nameMod.replace(".", "");
+            nameMod = nameMod.replace(" ", "");
+            nameMod = nameMod.replace("-", "");
             return nameMod;
           });
           const body = document.querySelector("#evolutionsTbl tbody");
