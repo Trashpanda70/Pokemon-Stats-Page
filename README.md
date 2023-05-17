@@ -13,10 +13,11 @@ Note that because it runs in Docker, you do not need to have NodeJS, SQLite3, or
 
 Support might soon come for having executable file since NodeJS v20 supports [making executable files that can run on machines without NodeJS](https://nodejs.org/api/single-executable-applications.html). But this would be something for the future.
 
-To check for updates you can follow [these instructions](#how-do-i-check-for-updates)
-
+## Quick Answers to Questions:
+- To check for updates you can follow [these instructions](#how-do-i-check-for-updates). These update would be for bug fixes or changes to Pokemon stats/moves etc. (Maybe a new feature but probably not idk).
 - Note that there are no spaces in move and ability names due to how they are stored in the game files.
-- When looking at the level that Pokemon learn moves at, a level of 0 means the Pokemon learns that move when it evolves into that species (moves learned on evolution)
+- When looking at the level that Pokemon learn moves at, a level of 0 means the Pokemon learns that move when it evolves into that species (moves learned on evolution). A level of 1 means that the Pokemon (most likely) can only be taught the move via the move reminder.
+- Alternate forms are not shown, however, the only changes for alternate form Pokemon are slight buffs to the other Wormadam forms. Rotom alternate forms inherit stats from base Rotom (which has been buffed), and still work the same.
 
 ## **Installing Docker**
 
