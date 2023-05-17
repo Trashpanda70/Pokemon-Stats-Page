@@ -419,8 +419,13 @@
               evArr[i + 1] = "Defense greater than attack at level";
             } else if (evArr[i + 1] == "AtkDefEqual") {
               evArr[i + 1] = "Attack equals defense at level";
-            } else if (evArr[i + 1].includes("Item")) {
+            } else if (evArr[i + 1].includes("HoldItem")) {
               //change wording of item evolution methods
+              evArr[i + 1] = evArr[i + 1].replace(
+                "HoldItem",
+                " Level up holding item "
+              );
+            } else if (evArr[i + 1].includes("Item")) {
               evArr[i + 1] = evArr[i + 1].replace("Item", "Use Item ");
             } else if (
               evArr[i + 1].includes("Happiness") &&
@@ -432,6 +437,9 @@
                 "High Happiness "
               );
             }
+            //clarity
+            evArr[i + 1] = evArr[i + 1].replace("Day", "Daytime");
+            evArr[i + 1] = evArr[i + 1].replace("Night", "Nighttime");
             //create row elements
             const row = document.createElement("tr");
             const pokeCell = document.createElement("td");
